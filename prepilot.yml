@@ -1,0 +1,13 @@
+---
+# This playbook deploys chinac Neo CloudUltra management platform
+
+- name: execute prepilot preparations and checks
+  hosts:
+    - ADMIN
+    - OSD
+    - MON
+  roles:
+    - prepilot
+
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

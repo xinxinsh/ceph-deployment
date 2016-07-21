@@ -1,0 +1,33 @@
+# First field of CHANGEME is for IP/HOSTNAME
+# Some host we use root, while some use normal user.
+# If normal user, we need sudo/su, so add ansible_become and ansible_become_method
+# If root, we will not need ansible_become and ansible_become_method
+#
+# Example:
+#
+# CHANGEME	ansible_connection=ssh	ansible_user=CHANGEME	ansible_become=true	ansible_become_method=sudo
+# CHANGEME	ansible_connection=ssh	ansible_user=root
+
+# required host vars:
+#   - ceph_network_ip: network ip address for ceph internal traffic
+#   - vm_network_ip: ip address for vm storage access
+
+neocu-ceph1 ansible_connection=ssh ansible_user=root ansible_host=220.231.204.146 ansible_port=2012 ceph_network_ip=10.10.12.146 vm_network_ip=10.10.11.146
+neocu-ceph2 ansible_connection=ssh ansible_user=root ansible_host=220.231.204.147 ansible_port=2012 ceph_network_ip=10.10.12.147 vm_network_ip=10.10.11.147
+neocu-ceph3 ansible_connection=ssh ansible_user=root ansible_host=220.231.204.149 ansible_port=2012 ceph_network_ip=10.10.12.149 vm_network_ip=10.10.11.149
+
+[OSD]
+neocu-ceph1
+neocu-ceph2
+neocu-ceph3
+
+[MON]
+neocu-ceph1
+neocu-ceph2
+neocu-ceph3
+
+[ADMIN]
+neocu-ceph1
+
+
+

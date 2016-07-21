@@ -1,0 +1,30 @@
+---
+# Variables listed here are applicable to all
+
+# some operations could be time consuming and users may want to skip them
+# totally even though they are idempotent
+step_switch:
+  nic: yes
+  hostname: yes
+  selinux: yes
+  ssh_key: yes
+  repo: yes
+  
+
+# each host must set ceph_network_ip and vm_network_ip
+network_interfaces:
+    - name: ceph_network
+      nic: em2
+      prefix: 24
+      network: 10.10.12.0
+      use_bonding: no
+      ip_addr_ref: ceph_network_ip
+
+    - name: vm_network
+      nic: em1
+      prefix: 24
+      network: 10.10.11.0
+      use_bonding: no
+      ip_addr_ref: vm_network_ip
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

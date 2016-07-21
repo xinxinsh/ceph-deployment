@@ -1,0 +1,45 @@
+---
+- name: remove last temp key
+  local_action: file path=/tmp/ceph_key_id_rsa state=absent
+  run_once: yes
+
+- name: generate a pair of ssh key
+  local_action: command ssh-keygen -t rsa -b 2048 -f /tmp/ceph_key_id_rsa -q -N ""
+  run_once: yes
+
+- name: upload the generated private key to nodes
+  copy:
+    backup: yes
+    src: /tmp/ceph_key_id_rsa
+    dest: /root/.ssh/
+    mode: 0600
+    force: yes
+
+- name: upload the generated public key to nodes
+  copy:
+    src: /tmp/ceph_key_id_rsa.pub
+    dest: /root/.ssh/
+    mode: 0644
+    force: yes
+
+- name: inject ssh keys to nodes
+  authorized_key: user=root key={{ lookup('file', '/tmp/ceph_key_id_rsa.pub') }}
+
+- name: make ssh configurations
+  blockinfile:
+    create: yes
+    mode: 0644
+    dest: /root/.ssh/config
+    marker: "# {mark} ANSIBLE INJECTED CEPH NODE SSH CONFIG FOR {{ item }}"
+    block: |
+      Host {{ item }}
+        User root
+        Port {{ hostvars[item].ansible_port | default(22) }}
+        IdentityFile /root/.ssh/ceph_key_id_rsa
+        StrictHostKeyChecking no
+        UserKnownHostsFile=/dev/null
+        PasswordAuthentication=no
+  with_items: "{{ groups.all }}"
+  when: "item != 'localhost'"
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

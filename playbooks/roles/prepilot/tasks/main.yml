@@ -1,0 +1,24 @@
+---
+# tasks file for prepilot
+
+- name: setup network interfaces
+  include: network-interfaces.yml
+  with_items: "{{ network_interfaces }}"
+  when: step_switch.nic
+
+- name: setup hosts file
+  include: hosts-config.yml
+  when: step_switch.hostname
+
+- name: disable selinux
+  include: selinux.yml
+  when: step_switch.selinux
+
+- name: setup passwordless ssh on every node
+  include: ssh_key_import.yml
+  when: step_switch.ssh_key
+
+- name: verify all configurations
+  include: verify.yml
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
