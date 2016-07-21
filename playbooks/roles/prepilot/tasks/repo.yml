@@ -1,0 +1,69 @@
+---
+# This task will handle some basic function
+# such as config package repo, install mandatory packages
+# for all nodes and so on
+#
+- name: Enable Openstack Repository for CentOS
+  yum: name=centos-release-openstack-mitaka state=latest
+  when: not INTERNAL_REPO_ENABLED
+
+# the module yum_repository hasn't been officially released on PIP by Apr.
+# 2016 download it from github then put it under
+# site-pakcages/ansible/modules/extras/packaging/os/
+- name: Use Chinac internal mirrors for community version
+  yum_repository:
+    name: "{{ item.name }}"
+    file: "{{ item.file }}"
+    baseurl: "{{ item.baseurl }}"
+    description: "{{ item.description | default(item.name) }}"
+    state: present
+    failovermethod: priority
+    enabled: 1
+    gpgcheck: no
+  with_items: "{{ INTERNAL_REPO_MIRRORS }}"
+  when: INTERNAL_REPO_ENABLED
+
+# Below is for Chinac internal repo
+# We need copy some key file as https used
+#
+- name: Create target directory
+  file: path=/etc/pki/chinac state=directory mode=0755
+  when: CHINAC_REPO_ENABLED
+
+- name: Copy key file to target host
+  copy: src={{ item }} dest=/etc/pki/chinac/ mode=755
+  with_items:
+    - yum.pem
+    - yum-key.pem
+  when: CHINAC_REPO_ENABLED
+
+- name: Config Chinac to use own rpm repo
+  yum_repository:
+    name: "{{ item.name }}"
+    file: "{{ item.file }}"
+    baseurl: "{{ item.baseurl }}"
+    description: "{{ item.description | default(item.name) }}"
+    state: present
+    failovermethod: priority
+    enabled: 1
+    gpgcheck: no
+    sslverify: 0
+    sslclientcert: "{{ item.sslclientcert | default('') }}"
+    sslclientkey: "{{ item.sslclientkey | default('') }}"
+  with_items: "{{ CHINAC_REPO_MIRROS }}"
+  when: CHINAC_REPO_ENABLED
+
+- name: disable fastestmirror plugin
+  ini_file:
+    backup: yes
+    dest: /etc/yum/pluginconf.d/fastestmirror.conf
+    no_extra_spaces: yes
+    section: main
+    option: enabled
+    value: 0
+    state: present
+
+- name: Clean yum repo and re-create cache
+  shell: yum clean all && yum repolist
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

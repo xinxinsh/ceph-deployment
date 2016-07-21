@@ -18,6 +18,10 @@
   include: ssh_key_import.yml
   when: step_switch.ssh_key
 
+- name: use local repository
+  include: repo.yml
+  when: step_switch.repo
+
 - name: verify all configurations
   include: verify.yml
 

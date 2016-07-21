@@ -4,27 +4,75 @@
 # some operations could be time consuming and users may want to skip them
 # totally even though they are idempotent
 step_switch:
-  nic: yes
-  hostname: yes
-  selinux: yes
-  ssh_key: yes
+  nic: no
+  hostname: no
+  selinux: no
+  ssh_key: no
   repo: yes
   
-
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
-    - name: ceph_network
-      nic: em2
-      prefix: 24
-      network: 10.10.12.0
-      use_bonding: no
-      ip_addr_ref: ceph_network_ip
+  - name: ceph_network
+    nic: em2
+    prefix: 24
+    network: 10.10.12.0
+    use_bonding: no
+    ip_addr_ref: ceph_network_ip
 
-    - name: vm_network
-      nic: em1
-      prefix: 24
-      network: 10.10.11.0
-      use_bonding: no
-      ip_addr_ref: vm_network_ip
+  - name: vm_network
+    nic: em1
+    prefix: 24
+    network: 10.10.11.0
+    use_bonding: no
+    ip_addr_ref: vm_network_ip
+
+# Below is variables used to create local repo
+#
+INTERNAL_REPO_ENABLED: yes
+
+INTERNAL_REPO_HOST: "http://220.231.201.236"
+
+INTERNAL_REPO_MIRRORS:
+  - name: epel
+    file: epel
+    baseurl: "{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
+  - name: base
+    file: CentOS-Base
+    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/os/$basearch/"
+  - name: updates
+    file: CentOS-Base
+    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/updates/$basearch/"
+  - name: extras
+    file: CentOS-Base
+    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/extras/$basearch/"
+  - name: Ceph
+    file: ceph-087
+    baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/$basearch/"
+  - name: Ceph-noarch
+    file: ceph-087
+    baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/noarch/"
+  - name: Ceph-source
+    file: ceph-087
+    baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/SRPMS/"
+  - name: centos-openstack-mitaka
+    file: CentOS-OpenStack-mitaka
+    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/cloud/$basearch/openstack-mitaka/"
+  - name: centos-qemu-ev
+    file: CentOS-QEMU-EV
+    baseurl: "http://mirrors.ustc.edu.cn/centos/$releasever/virt/$basearch/kvm-common/"
+
+# Below is repo for Chinac only
+CHINAC_REPO_ENABLED: yes
+CHINAC_REPO_MIRROS:
+  - name: centos-openstack-mitaka
+    file: CentOS-OpenStack-mitaka
+    baseurl: "https://125.208.28.24/repos/openstack/openstack-mitaka/base"
+    sslclientcert: "/etc/pki/chinac/yum.pem"
+    sslclientkey: "/etc/pki/chinac/yum-key.pem"
+    #- name: centos-openstack-mitaka-dev
+    #- file: CentOS-OpenStack-mitaka
+    #- baseurl: "http://172.16.7.201/openstack/build/Dev/mitaka-chinac/latest"
+    #- sslclientcert: ""
+    #- sslclientkey: ""
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
