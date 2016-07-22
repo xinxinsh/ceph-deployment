@@ -35,7 +35,9 @@ INTERNAL_REPO_HOST: "http://220.231.201.236"
 INTERNAL_REPO_MIRRORS:
   - name: epel
     file: epel
-    baseurl: "{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
+    # libboost lttng cannot be found in internal repo
+    #baseurl: "{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
+    baseurl: "http://mirrors.ustc.edu.cn/epel/$releasever/$basearch/"
   - name: base
     file: CentOS-Base
     baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/os/$basearch/"
@@ -47,13 +49,19 @@ INTERNAL_REPO_MIRRORS:
     baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/extras/$basearch/"
   - name: Ceph
     file: ceph-087
-    baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/$basearch/"
+    #baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/$basearch/"
+    baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/$basearch/"
+    priority: 2
   - name: Ceph-noarch
     file: ceph-087
-    baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/noarch/"
+    #baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/noarch/"
+    baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/noarch/"
+    priority: 2
   - name: Ceph-source
     file: ceph-087
-    baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/SRPMS/"
+    #baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/SRPMS/"
+    baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/SRPMS/"
+    priority: 2
   - name: centos-openstack-mitaka
     file: CentOS-OpenStack-mitaka
     baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/cloud/$basearch/openstack-mitaka/"
@@ -74,5 +82,11 @@ CHINAC_REPO_MIRROS:
     #- baseurl: "http://172.16.7.201/openstack/build/Dev/mitaka-chinac/latest"
     #- sslclientcert: ""
     #- sslclientkey: ""
+
+PIP_REPO_MIRROR_HOST: pypi.mirrors.ustc.edu.cn
+
+DOWNLOAD_FOLDER: /opt/download
+
+CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

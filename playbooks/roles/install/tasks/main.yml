@@ -1,0 +1,88 @@
+---
+# tasks file for install
+- name: install ceph pakcages
+  yum:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - yum-plugin-priorities
+    - hdparm
+    - redhat-lsb-core
+    - python-flask
+    - gperftools
+    - leveldb
+    - python-requests
+    - cryptsetup
+    - gdisk
+    - glibc
+    - libstdc++
+    - libgcc
+    - nss-softokn-freebl
+    - boost-thread
+    - userspace-rcu
+    - parted
+    - python-argparse
+    - make
+    - automake
+    - autoconf
+    - boost-devel
+    - fuse-devel
+    - gcc-c++
+    - libtool
+    - libuuid-devel
+    - libblkid-devel
+    - keyutils-libs-devel
+    - cryptopp-devel
+    - fcgi-devel
+    - libcurl-devel
+    - expat-devel
+    - gperftools-devel
+    - libedit-devel
+    - libatomic_ops-devel
+    - snappy-devel
+    - leveldb-devel
+    - libaio-devel
+    - xfsprogs-devel
+    - git
+    - libudev-devel
+    - btrfs-progs
+    - python-pip
+    - lttng-ust
+    - boost
+    - boost-devel
+    - ceph
+#    - python-ceph
+    - libcephfs1
+    - librados2
+    - librbd1
+
+- name: install python argparse from pip
+  pip:
+    state: present
+    name: "{{ item }}"
+    extra_args: "-i https://{{ PIP_REPO_MIRROR_HOST }}/simple"
+  with_items:
+    - argparse
+
+#- name: clean existing download folder
+#  file:
+#    dest: "{{ DOWNLOAD_FOLDER }}"
+#    state: absent
+#
+#- name: create download folder
+#  file:
+#    dest: "{{ DOWNLOAD_FOLDER }}"
+#    state: directory
+#
+#- name: uncompress downloaded package
+#  unarchive:
+#    copy: no
+#    src: "{{ CEPH_PACKAGE_URL }}"
+#    dest: "{{ DOWNLOAD_FOLDER }}"
+#
+#- name: install downloaded packages
+#  command: "rpm -ivh *.rpm"
+#  args:
+#    chdir: "{{ DOWNLOAD_FOLDER }}/ceph6"
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
