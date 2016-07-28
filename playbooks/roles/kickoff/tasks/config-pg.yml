@@ -1,0 +1,43 @@
+---
+- name: get OSD number
+  shell: ceph -s | grep osdmap | sed 's/^.* \([0-9]\+\) osds.*/\1/'
+  register: total_osd
+
+- name: get up OSD number
+  shell: ceph -s | grep osdmap | sed 's/^.* \([0-9]\+\) up.*/\1/'
+  register: up_osd
+
+- name: get in OSD number
+  shell: ceph -s | grep osdmap | sed 's/^.* \([0-9]\+\) in.*/\1/'
+  register: in_osd
+
+- name: load OSD layout
+  set_fact:
+    osd_layout: "{{ ceph_osd_layouts[ceph_osd_layout_map[groups.OSD.0].osd] | mandatory }}"
+
+- assert:
+    that:
+      - "total_osd.stdout | int == (osd_layout | length * groups.OSD | length)"
+      - "up_osd.stdout | int == total_osd.stdout | int"
+      - "in_osd.stdout | int == total_osd.stdout | int"
+
+- name: calculate pg number
+  set_fact:
+    pg_num: "{{ (100 * (total_osd.stdout | int) / (groups.OSD | length)) | int }}"
+
+- debug: var=pg_num
+
+- name: create openstack storage pool
+  command: ceph osd pool create {{ item }} {{ pg_num }}
+  with_items:
+    - volumes
+    - images
+
+- name: change pool replica number
+  command: ceph osd pool set {{ item }} size {{ groups.OSD | length }}
+  with_items:
+    - volumes
+    - images
+    - rbd
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

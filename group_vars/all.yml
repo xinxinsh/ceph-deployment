@@ -153,4 +153,6 @@ ceph_osd_layout_map:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
 
+ceph_management_dir: /root/ceph-management/
+
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

@@ -1,0 +1,20 @@
+---
+# tasks file for kickoff
+
+- include: create-config.yml
+
+- include: zap-disk.yml
+  with_items: "{{ groups.OSD }}"
+  loop_control:
+    loop_var: osd_hostname
+
+- include: add-osd.yml
+  with_items: "{{ groups.OSD }}"
+  loop_control:
+    loop_var: osd_hostname
+
+- include: config-pg.yml
+
+- include: verify.yml
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

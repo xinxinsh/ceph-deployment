@@ -1,0 +1,18 @@
+---
+
+- name: load OSD layout
+  set_fact:
+    osd_layout: "{{ ceph_osd_layouts[ceph_osd_layout_map[osd_hostname].osd] | mandatory }}"
+
+- name: zap each OSD partition
+  command: ceph-deploy disk zap {{ osd_hostname }}:/dev/{{ item.device }}
+  args:
+    chdir: "{{ ceph_management_dir }}"
+  with_items: "{{ osd_layout }}"
+
+- name: log disk of each OSD
+  command: ceph-deploy disk list {{ osd_hostname }}
+  args:
+    chdir: "{{ ceph_management_dir }}"
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

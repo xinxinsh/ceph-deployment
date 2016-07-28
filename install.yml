@@ -1,5 +1,4 @@
 ---
-# This playbook deploys chinac Neo CloudUltra management platform
 
 - name: install ceph packages
   hosts:
@@ -8,5 +7,19 @@
     - MON
   roles:
     - install
+
+- name: install admin packages
+  hosts:
+    - ADMIN
+  roles:
+    - install-admin
+
+- name: configure and start ceph services
+  hosts:
+    - ADMIN
+  roles:
+    - kickoff
+  run_once: yes
+
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

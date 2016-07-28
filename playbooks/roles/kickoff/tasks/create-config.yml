@@ -1,0 +1,34 @@
+---
+- name: create management base folder
+  file:
+    dest: "{{ ceph_management_dir }}"
+    state: directory
+
+- name: create cluster
+  command: ceph-deploy --cluster ceph new {{ groups.MON | join(' ') }}
+  args:
+    chdir: "{{ ceph_management_dir }}"
+
+- name: create MON
+  #command: ceph-deploy --overwrite-conf mon create {{ groups.MON | join(' ') }}
+  command: ceph-deploy --overwrite-conf mon create-initial
+  args:
+    chdir: "{{ ceph_management_dir }}"
+
+  #- name: retrieve admin credentials
+  #  command: ceph-deploy gatherkeys {{ groups.MON | join(' ') }}
+  #  args:
+  #    chdir: "{{ ceph_management_dir }}"
+
+- name: get ceph cluster fsid from existing ceph.conf
+  shell: ceph -s | grep cluster | awk '{print $NF}'
+  register: ceph_cluster_id
+  failed_when: "ceph_cluster_id.stdout | length < 36"
+
+- name: upload config
+  template:
+    backup: yes
+    src: ceph.conf.j2
+    dest: /root/ceph-management/ceph.conf
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
