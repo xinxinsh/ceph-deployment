@@ -8,6 +8,7 @@ step_switch:
   hostname: no
   selinux: no
   ssh_key: no
+  partition: yes
   repo: yes
   
 # each host must set ceph_network_ip and vm_network_ip
@@ -88,5 +89,68 @@ PIP_REPO_MIRROR_HOST: pypi.mirrors.ustc.edu.cn
 DOWNLOAD_FOLDER: /opt/download
 
 CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
+
+disk_partition_layouts:
+  disk_partition_layout1:
+    - device: sde
+      partitions:
+      - sectors: [4096, 41947135]
+        name: cache01
+        filesystem: xfs
+      - sectors: [41947136, 83890175]
+        name: cache02
+        filesystem: xfs
+      - sectors: [83890176, 125833215]
+        name: cache03
+        filesystem: xfs
+      - sectors: [125833216, 167776255]
+        name: cache04
+        filesystem: xfs
+      - sectors: [167776256, 209719295]
+        name: cache05
+        filesystem: xfs
+      - sectors: [209719296, 251662335]
+        name: cache06
+        filesystem: xfs
+
+ceph_osd_layouts:
+  # 6 SATA + 3 SSD for OSDs
+  # 1 SSD is used as SATA journal
+  ceph_osd_layout_1:
+    - device: sda
+      use_cache: yes
+      cache: sde1
+    - device: sdb
+      use_cache: yes
+      cache: sde2
+    - device: sdc
+      use_cache: yes
+      cache: sde3
+    - device: sdd
+      use_cache: yes
+      cache: sde4
+    - device: sdi
+      use_cache: yes
+      cache: sde5
+    - device: sdj
+      use_cache: yes
+      cache: sde6
+    - device: sdf
+      use_cache: no
+    - device: sdg
+      use_cache: no
+    - device: sdh
+      use_cache: no
+
+ceph_osd_layout_map:
+  neocu-ceph1:
+    partition: disk_partition_layout1
+    osd: ceph_osd_layout_1
+  neocu-ceph2:
+    partition: disk_partition_layout1
+    osd: ceph_osd_layout_1
+  neocu-ceph3:
+    partition: disk_partition_layout1
+    osd: ceph_osd_layout_1
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

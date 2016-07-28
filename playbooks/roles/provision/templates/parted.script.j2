@@ -1,0 +1,15 @@
+#!/bin/bash
+parted --script "/dev/{{ disk.device | escape }}" \
+    mklabel gpt \
+    unit s \
+    {% for part in disk.partitions %}
+    mkpart {{ part.name }} {{ part.sectors[0] }} {{ part.sectors[1] }} \
+    {% endfor %}
+    p \
+    q
+
+{% for part in disk.partitions %}
+mkfs.xfs -f -K -i size=2048 -d agcount=12 /dev/{{ disk.device }}{{ loop.index }}
+{% endfor %}
+
+# vim: ft=sh:shiftwidth=4:tabstop=4:expandtab:softtabstop=4
