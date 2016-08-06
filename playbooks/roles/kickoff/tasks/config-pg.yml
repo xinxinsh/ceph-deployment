@@ -23,7 +23,7 @@
 
 - name: calculate pg number
   set_fact:
-    pg_num: "{{ (100 * (total_osd.stdout | int) / (groups.OSD | length)) | int }}"
+    pg_num: "{{ ((100 * (total_osd.stdout | int) / (groups.OSD | length)) | int) | int }}"
 
 - debug: var=pg_num
 

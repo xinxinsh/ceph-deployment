@@ -16,9 +16,4 @@
     chdir: "{{ ceph_management_dir }}"
   with_items: "{{ osd_layout | rejectattr('use_cache') | list }}"
 
-- name: calculate pg number
-  set_fact:
-    pg_num: "{{ 100 * osd_layout | length / groups.OSD | length }}"
-
-- debug: var=pg_num
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

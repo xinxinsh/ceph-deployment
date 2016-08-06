@@ -55,6 +55,7 @@
     - libcephfs1
     - librados2
     - librbd1
+    - chrony
 
 - name: install python argparse from pip
   pip:
@@ -63,6 +64,9 @@
     extra_args: "-i https://{{ PIP_REPO_MIRROR_HOST }}/simple"
   with_items:
     - argparse
+
+- name: enable and start chronyd (ntp)
+  service: name=chronyd enabled=yes state=started
 
 #- name: clean existing download folder
 #  file:
