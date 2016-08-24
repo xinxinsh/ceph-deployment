@@ -7,23 +7,23 @@ step_switch:
   nic: no
   hostname: no
   selinux: no
-  ssh_key: no
+  ssh_key: yes
   partition: yes
   repo: yes
   
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
   - name: ceph_network
-    nic: em2
+    nic: eno33559296
     prefix: 24
-    network: 10.10.12.0
+    network: 10.0.0.0
     use_bonding: no
     ip_addr_ref: ceph_network_ip
 
   - name: vm_network
-    nic: em1
+    nic: eno33559296
     prefix: 24
-    network: 10.10.11.0
+    network: 10.0.0.0
     use_bonding: no
     ip_addr_ref: vm_network_ip
 
@@ -31,47 +31,42 @@ network_interfaces:
 #
 INTERNAL_REPO_ENABLED: yes
 
-INTERNAL_REPO_HOST: "http://220.231.201.236"
+INTERNAL_REPO_HOST: "mirrors.aliyun.com"
 
 INTERNAL_REPO_MIRRORS:
   - name: epel
     file: epel
     # libboost lttng cannot be found in internal repo
     #baseurl: "{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
-    baseurl: "http://mirrors.ustc.edu.cn/epel/$releasever/$basearch/"
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
   - name: base
     file: CentOS-Base
-    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/os/$basearch/"
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/os/$basearch/"
   - name: updates
     file: CentOS-Base
-    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/updates/$basearch/"
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/updates/$basearch/"
   - name: extras
     file: CentOS-Base
-    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/extras/$basearch/"
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/extras/$basearch/"
   - name: Ceph
-    file: ceph-087
-    #baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/$basearch/"
-    baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/$basearch/"
-    priority: 2
+    file: ceph-094
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/noarch"
+    #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/$basearch/"
+    priority: 1
   - name: Ceph-noarch
-    file: ceph-087
-    #baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/noarch/"
-    baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/noarch/"
-    priority: 2
+    file: ceph-094
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/noarch/"
+    #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/noarch/"
+    priority: 1
   - name: Ceph-source
-    file: ceph-087
-    #baseurl: "{{ INTERNAL_REPO_HOST }}/data/chinac-ceph/rpm-giant/rhel7/SRPMS/"
-    baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/SRPMS/"
-    priority: 2
-  - name: centos-openstack-mitaka
-    file: CentOS-OpenStack-mitaka
-    baseurl: "{{ INTERNAL_REPO_HOST }}/centos7/$releasever/cloud/$basearch/openstack-mitaka/"
-  - name: centos-qemu-ev
-    file: CentOS-QEMU-EV
-    baseurl: "http://mirrors.ustc.edu.cn/centos/$releasever/virt/$basearch/kvm-common/"
+    file: ceph-094
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/SRPMS/"
+    #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/SRPMS/"
+    priority: 1
+
 
 # Below is repo for Chinac only
-CHINAC_REPO_ENABLED: yes
+CHINAC_REPO_ENABLED: no
 CHINAC_REPO_MIRROS:
   - name: centos-openstack-mitaka
     file: CentOS-OpenStack-mitaka
@@ -86,73 +81,47 @@ CHINAC_REPO_MIRROS:
 
 PIP_REPO_MIRROR_HOST: pypi.mirrors.ustc.edu.cn
 
+#if use 1.5.34 will happen gatherkeys 'allow mds *' problem
+CEPH_DPLOY_RPM_URL: http://{{INTERNAL_REPO_HOST}}/ceph/rpm-hammer/el7/noarch/ceph-deploy-1.5.27-0.noarch.rpm
 DOWNLOAD_FOLDER: /opt/download
 
 CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
 
 disk_partition_layouts:
   disk_partition_layout1:
-    - device: sde
+    - device: sdb
       partitions:
-      - sectors: [4096, 41947135]
+      - percent: [4096s, 33%]
         name: cache01
         filesystem: xfs
-      - sectors: [41947136, 83890175]
+      - percent: [33%, 66%]
         name: cache02
         filesystem: xfs
-      - sectors: [83890176, 125833215]
+      - percent: [66% ,100%]
         name: cache03
-        filesystem: xfs
-      - sectors: [125833216, 167776255]
-        name: cache04
-        filesystem: xfs
-      - sectors: [167776256, 209719295]
-        name: cache05
-        filesystem: xfs
-      - sectors: [209719296, 251662335]
-        name: cache06
         filesystem: xfs
 
 ceph_osd_layouts:
   # 6 SATA + 3 SSD for OSDs
   # 1 SSD is used as SATA journal
   ceph_osd_layout_1:
-    - device: sda
-      use_cache: yes
-      cache: sde1
-    - device: sdb
-      use_cache: yes
-      cache: sde2
     - device: sdc
       use_cache: yes
-      cache: sde3
+      cache: sdb1
     - device: sdd
       use_cache: yes
-      cache: sde4
-    - device: sdi
+      cache: sdb2
+    - device: sde
       use_cache: yes
-      cache: sde5
-    - device: sdj
-      use_cache: yes
-      cache: sde6
-    - device: sdf
-      use_cache: no
-    - device: sdg
-      use_cache: no
-    - device: sdh
-      use_cache: no
-
+      cache: sdb3
+   
 ceph_osd_layout_map:
-  neocu-ceph1:
+  luo-c4:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
-  neocu-ceph2:
-    partition: disk_partition_layout1
-    osd: ceph_osd_layout_1
-  neocu-ceph3:
-    partition: disk_partition_layout1
-    osd: ceph_osd_layout_1
+ 
 
 ceph_management_dir: /root/ceph-management/
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
+

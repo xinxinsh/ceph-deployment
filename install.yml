@@ -1,5 +1,11 @@
 ---
 
+- name: install admin packages
+  hosts:
+    - ADMIN
+  roles:
+    - install-admin
+
 - name: install ceph packages
   hosts:
     - ADMIN
@@ -8,11 +14,7 @@
   roles:
     - install
 
-- name: install admin packages
-  hosts:
-    - ADMIN
-  roles:
-    - install-admin
+
 
 - name: configure and start ceph services
   hosts:

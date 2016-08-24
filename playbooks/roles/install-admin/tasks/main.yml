@@ -1,8 +1,13 @@
 ---
 # tasks file for install-ceph-deploy
+#- name: install ceph-deploy
+#  yum:
+#    state: present
+#    name: ceph-deploy
+
 - name: install ceph-deploy
-  yum:
-    state: present
-    name: ceph-deploy
+  command: "rpm -ivh {{CEPH_DPLOY_RPM_URL}}"
+
+
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

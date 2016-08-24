@@ -3,7 +3,7 @@ parted --script "/dev/{{ disk.device | escape }}" \
     mklabel gpt \
     unit s \
     {% for part in disk.partitions %}
-    mkpart {{ part.name }} {{ part.sectors[0] }} {{ part.sectors[1] }} \
+    mkpart {{ part.name }} {{ part.percent[0] }} {{ part.percent[1] }} \
     {% endfor %}
     p \
     q
