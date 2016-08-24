@@ -3,7 +3,7 @@
   shell: ping -c 4 {{ item }}  | sed -n 's/.*\([0-9]\+\) received.*/\1/p'
   register: packet_loss
   with_items: "{{ groups.all }}"
-  when: "item != 'localhost'"
+  when: "inventory_hostname in groups.ADMIN and item != 'localhost'"
 
 - name: check ssh passwordless login
   command: ssh -o PasswordAuthentication=no {{ item }} hostname -s

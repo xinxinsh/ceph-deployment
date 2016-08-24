@@ -10,6 +10,10 @@
   include: hosts-config.yml
   when: step_switch.hostname
 
+- name: use local repository
+  include: repo.yml
+  when: step_switch.repo
+
 - name: disable selinux
   include: selinux.yml
   when: step_switch.selinux
@@ -17,10 +21,6 @@
 - name: setup passwordless ssh on every node
   include: ssh_key_import.yml
   when: step_switch.ssh_key
-
-- name: use local repository
-  include: repo.yml
-  when: step_switch.repo
 
 - name: verify all configurations
   include: verify.yml
