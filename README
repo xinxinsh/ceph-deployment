@@ -1,0 +1,8 @@
+Simple instruction
+=========================================
+
+ansible-playbook prepilot.yml
+
+ansible-playbook provision.yml
+
+ansible-playbook install.yml
