@@ -6,3 +6,11 @@ ansible-playbook prepilot.yml
 ansible-playbook provision.yml
 
 ansible-playbook install.yml
+
+Some hints for group_vars/all.yml
+=========================================
+1. Each ceph node need two nics
+One is for data and the other is for management
+
+2. Each ceph node need another three hard disks at least
+For example, sdb, sdc, sdd 

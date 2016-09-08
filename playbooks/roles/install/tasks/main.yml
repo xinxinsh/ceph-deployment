@@ -1,16 +1,17 @@
 ---
 # tasks file for install
 
-- name: install python argparse from pip
-  pip:
-    state: present
-    name: "{{ item }}"
-    extra_args: "-i https://{{ PIP_REPO_MIRROR_HOST }}/simple"
-  with_items:
-    - argparse
+#- name: install python argparse from pip
+#  pip:
+#    state: present
+#    name: "{{ item }}"
+#    extra_args: "-i https://{{ PIP_REPO_MIRROR_HOST }}/simple"
+#  with_items:
+#    - argparse
 
 - name: ceph-deploy install slave node
-  command: "ceph-deploy install --no-adjust-repos {{ groups[all] | join(' ') }}"
+  command: "ceph-deploy install --no-adjust-repos {{ groups['all'] | join(' ') }}"
+  when: ansible_hostname == "{{ groups['ADMIN'] }}"
   
 #- name: clean existing download folder
 #  file:

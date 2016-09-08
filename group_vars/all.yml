@@ -4,26 +4,26 @@
 # some operations could be time consuming and users may want to skip them
 # totally even though they are idempotent
 step_switch:
-  nic: no
-  hostname: no
-  selinux: no
+  nic: yes
+  hostname: yes
+  selinux: yes
   ssh_key: yes
   partition: yes
   repo: yes
-  
+
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
   - name: ceph_network
-    nic: eno33559296
+    nic: eth1
     prefix: 24
-    network: 10.0.0.0
+    network: 150.132.10.0
     use_bonding: no
     ip_addr_ref: ceph_network_ip
 
   - name: vm_network
-    nic: eno33559296
+    nic: eth0
     prefix: 24
-    network: 10.0.0.0
+    network: 168.10.10.0
     use_bonding: no
     ip_addr_ref: vm_network_ip
 
@@ -58,6 +58,11 @@ INTERNAL_REPO_MIRRORS:
     baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/noarch/"
     #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/noarch/"
     priority: 1
+  - name: Ceph-x86_64
+    file: ceph-094
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/x86_64/"
+    #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/x86_64/"
+    priority: 1
   - name: Ceph-source
     file: ceph-094
     baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/SRPMS/"
@@ -89,7 +94,7 @@ CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
 
 disk_partition_layouts:
   disk_partition_layout1:
-    - device: sdb
+    - device: vdb
       partitions:
       - percent: [4096s, 33%]
         name: cache01
@@ -103,25 +108,29 @@ disk_partition_layouts:
 
 ceph_osd_layouts:
   # 6 SATA + 3 SSD for OSDs
-  # 1 SSD is used as SATA journal
+  # 1 SSD is sed as SATA journal
   ceph_osd_layout_1:
-    - device: sdc
+    - device: vdc
       use_cache: yes
-      cache: sdb1
-    - device: sdd
+      cache: vdb1
+    - device: vdd
       use_cache: yes
-      cache: sdb2
-    - device: sde
+      cache: vdb2
+    - device: vde
       use_cache: yes
-      cache: sdb3
+      cache: vdb3
    
 ceph_osd_layout_map:
-  luo-c4:
+  ceph1:
+    partition: disk_partition_layout1
+    osd: ceph_osd_layout_1
+  ceph2:
+    partition: disk_partition_layout1
+    osd: ceph_osd_layout_1
+  ceph3:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
  
-
 ceph_management_dir: /root/ceph-management/
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
-

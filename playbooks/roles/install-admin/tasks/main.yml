@@ -6,8 +6,6 @@
 #    name: ceph-deploy
 
 - name: install ceph-deploy
-  command: "rpm -ivh {{CEPH_DPLOY_RPM_URL}}"
-
-
+  yum: name="{{CEPH_DPLOY_RPM_URL}}"
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
