@@ -11,7 +11,7 @@
 
 - name: ceph-deploy install slave node
   command: "ceph-deploy install --no-adjust-repos {{ groups['all'] | join(' ') }}"
-  when: ansible_hostname == "{{ groups['ADMIN'] }}"
+  when: ansible_hostname in "{{ groups['ADMIN'] }}"
   
 #- name: clean existing download folder
 #  file:
