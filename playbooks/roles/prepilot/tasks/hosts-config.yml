@@ -5,9 +5,9 @@
 - name: add hosts file line
   lineinfile:
     dest: /etc/hosts
-    regexp: '^{{ item.value.ceph_network_ip }} '
+    regexp: '^{{ item.value.vm_network_ip }} '
     line: |
-      {{ item.value.ceph_network_ip }}    {{ item.key }}
+      {{ item.value.vm_network_ip }}    {{ item.key }}
   with_dict: "{{ hostvars }}"
 
 
