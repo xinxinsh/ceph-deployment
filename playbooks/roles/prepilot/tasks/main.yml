@@ -1,6 +1,14 @@
 ---
 # tasks file for prepilot
 
+- name: install libselinux-python
+  yum: name={{ item }}
+  with_items:
+     - libselinux-python
+  register: pkg_inst_result
+  until: pkg_inst_result|success
+  retries: 3
+
 - name: setup network interfaces
   include: network-interfaces.yml
   with_items: "{{ network_interfaces }}"
