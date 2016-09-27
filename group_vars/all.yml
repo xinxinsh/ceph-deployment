@@ -14,16 +14,16 @@ step_switch:
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
   - name: ceph_network
-    nic: eth0
+    nic: eth1
     prefix: 24
-    network: 192.168.122.0
+    network: 150.130.10.0
     use_bonding: no
     ip_addr_ref: ceph_network_ip
 
   - name: vm_network
-    nic: eth0
+    nic: eth2
     prefix: 24
-    network: 192.168.122.0
+    network: 150.132.10.0
     use_bonding: no
     ip_addr_ref: vm_network_ip
 
@@ -94,28 +94,40 @@ CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
 
 disk_partition_layouts:
   disk_partition_layout1:
-    - device: vda
+    - device: vdb
       partitions:
-      - percent: [4096s, 100%]
+      - percent: [4096s, 33%]
         name: cache01
+        filesystem: xfs
+      - percent: [34%, 66%]
+        name: cache02
+        filesystem: xfs
+      - percent: [67%, 100%]
+        name: cache03
         filesystem: xfs
 
 ceph_osd_layouts:
   # 6 SATA + 3 SSD for OSDs
   # 1 SSD is sed as SATA journal
   ceph_osd_layout_1:
-    - device: vdb
+    - device: vdc
       use_cache: yes
-      cache: vda1
+      cache: vdb1
+    - device: vdd
+      use_cache: yes
+      cache: vdb2
+    - device: vde
+      use_cache: yes
+      cache: vdb3
    
 ceph_osd_layout_map:
-  master:
+  ceph1:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
-  slave1:
+  ceph2:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
-  slave2:
+  ceph3:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
  
