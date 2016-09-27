@@ -17,4 +17,7 @@
 
 - include: verify.yml
 
+# When deploy openstack we need admin keyring
+- include: download_admin_keyring.yml
+
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

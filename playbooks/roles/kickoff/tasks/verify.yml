@@ -4,7 +4,7 @@
   command: ceph health
   register: rc
   until: rc.stdout == 'HEALTH_OK'
-  retries: 3
+  retries: 10
   delay: 5
 #  failed_when: "rc.stdout != 'HEALTH_OK'" 
 
