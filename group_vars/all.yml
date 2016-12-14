@@ -16,14 +16,14 @@ network_interfaces:
   - name: ceph_network
     nic: eth1
     prefix: 24
-    network: 150.132.10.0
+    network: 150.130.10.0
     use_bonding: no
     ip_addr_ref: ceph_network_ip
 
   - name: vm_network
-    nic: eth0
+    nic: eth2
     prefix: 24
-    network: 168.10.10.0
+    network: 150.132.10.0
     use_bonding: no
     ip_addr_ref: vm_network_ip
 
@@ -49,23 +49,23 @@ INTERNAL_REPO_MIRRORS:
     file: CentOS-Base
     baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/extras/$basearch/"
   - name: Ceph
-    file: ceph-094
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/noarch"
+    file: ceph-jewel
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-jewel/el7/noarch"
     #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/$basearch/"
     priority: 1
   - name: Ceph-noarch
-    file: ceph-094
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/noarch/"
+    file: ceph-jewel
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-jewel/el7/noarch/"
     #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/noarch/"
     priority: 1
   - name: Ceph-x86_64
-    file: ceph-094
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/x86_64/"
+    file: ceph-jewel
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-jewel/el7/x86_64/"
     #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/x86_64/"
     priority: 1
   - name: Ceph-source
-    file: ceph-094
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-hammer/el7/SRPMS/"
+    file: ceph-jewel
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/ceph/rpm-jewel/el7/SRPMS/"
     #baseurl: "http://mirrors.ustc.edu.cn/ceph/rpm/el7/SRPMS/"
     priority: 1
 
@@ -87,7 +87,7 @@ CHINAC_REPO_MIRROS:
 PIP_REPO_MIRROR_HOST: pypi.mirrors.ustc.edu.cn
 
 #if use 1.5.34 will happen gatherkeys 'allow mds *' problem
-CEPH_DPLOY_RPM_URL: http://{{INTERNAL_REPO_HOST}}/ceph/rpm-hammer/el7/noarch/ceph-deploy-1.5.27-0.noarch.rpm
+CEPH_DPLOY_RPM_URL: http://{{INTERNAL_REPO_HOST}}/ceph/rpm-jewel/el7/noarch/ceph-deploy-1.5.34-0.noarch.rpm
 DOWNLOAD_FOLDER: /opt/download
 
 CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
@@ -99,10 +99,10 @@ disk_partition_layouts:
       - percent: [4096s, 33%]
         name: cache01
         filesystem: xfs
-      - percent: [33%, 66%]
+      - percent: [34%, 66%]
         name: cache02
         filesystem: xfs
-      - percent: [66% ,100%]
+      - percent: [67%, 100%]
         name: cache03
         filesystem: xfs
 

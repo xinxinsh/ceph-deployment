@@ -4,8 +4,16 @@ auth_service_required = cephx
 auth_client_required = cephx
 auth_cluster_required = cephx
 mon_host = {% for mon_host in groups.MON -%}
-               {{ hostvars[mon_host].ceph_network_ip | mandatory }}{%- if not loop.last -%},{%- endif -%}
+               {{ hostvars[mon_host].vm_network_ip | mandatory }}{%- if not loop.last -%},{%- endif -%}
            {%- endfor %}
+
+{% for item in network_interfaces -%}
+    {% if item.name == 'ceph_network' -%}
+        cluster_network = {{ item.network }}/{{ item.prefix }}
+    {% elif item.name == 'vm_network' -%}
+        public_network = {{ item.network }}/{{ item.prefix }}
+    {%- endif %}
+{%- endfor %}
 
 mon_initial_members = {{ groups.MON | join(',') }}
 

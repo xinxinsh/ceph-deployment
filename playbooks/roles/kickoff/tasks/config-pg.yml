@@ -1,15 +1,23 @@
 ---
+- pause: prompt="This is workaround!!! We found sometime osd need more time to online" minutes=1
+
 - name: get OSD number
   shell: ceph -s | grep osdmap | sed 's/^.* \([0-9]\+\) osds.*/\1/'
   register: total_osd
+
+- debug: var=total_osd
 
 - name: get up OSD number
   shell: ceph -s | grep osdmap | sed 's/^.* \([0-9]\+\) up.*/\1/'
   register: up_osd
 
+- debug: var=up_osd
+
 - name: get in OSD number
   shell: ceph -s | grep osdmap | sed 's/^.* \([0-9]\+\) in.*/\1/'
   register: in_osd
+
+- debug: var=in_osd
 
 - name: load OSD layout
   set_fact:

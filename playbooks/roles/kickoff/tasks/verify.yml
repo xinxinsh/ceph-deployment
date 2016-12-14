@@ -3,6 +3,9 @@
 - name: check ceph health
   command: ceph health
   register: rc
-  failed_when: "rc.stdout != 'HEALTH_OK'" 
+  until: rc.stdout == 'HEALTH_OK'
+  retries: 10
+  delay: 5
+#  failed_when: "rc.stdout != 'HEALTH_OK'" 
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
