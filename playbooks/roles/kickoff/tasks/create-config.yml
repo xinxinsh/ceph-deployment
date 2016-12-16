@@ -25,10 +25,25 @@
   register: ceph_cluster_id
   failed_when: "ceph_cluster_id.stdout | length < 36"
 
-- name: upload config
+- name: upload config for S_HDD cluster
   template:
     backup: yes
-    src: ceph.conf.j2
+    src: ceph.conf-hdd.j2
     dest: /root/ceph-management/ceph.conf
+  when: "ClUSTER_TYPE == 'S_HDD'"
+  
+- name: upload config for E_HDD cluster
+  template:
+    backup: yes
+    src: ceph.conf-edd.j2
+    dest: /root/ceph-management/ceph.conf
+  when: "ClUSTER_TYPE == 'E_HDD'"
+  
+- name: upload config for SSD cluster
+  template:
+    backup: yes
+    src: ceph.conf-ssd.j2
+    dest: /root/ceph-management/ceph.conf  
+  when: "ClUSTER_TYPE == 'SSD'"
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

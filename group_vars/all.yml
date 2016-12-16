@@ -26,6 +26,14 @@ network_interfaces:
     network: 150.132.10.0
     use_bonding: no
     ip_addr_ref: vm_network_ip
+    
+# switch used to control ceph type
+# valid values: S_HDD, E_HDD, SSD
+# S_HDD: hdd-based cluster, provide large volume disks
+# E_HDD: hdd-based cluster, provide large, and higher performance disk 
+# SSD: ssd-based cluster, provide highest performance disk
+#
+ClUSTER_TYPE: "S_HDD"
 
 # Below is variables used to create local repo
 #
