@@ -12,19 +12,19 @@
 #   - ceph_network_ip: network ip address for ceph internal traffic
 #   - vm_network_ip: ip address for vm storage access
 
-ceph1 ansible_connection=ssh ansible_user=root ansible_host=10.21.1.204 ansible_port=22 ceph_network_ip=150.130.10.20 vm_network_ip=150.132.10.12
-ceph2 ansible_connection=ssh ansible_user=root ansible_host=10.21.1.205 ansible_port=22 ceph_network_ip=150.130.10.21 vm_network_ip=150.132.10.13
-ceph3 ansible_connection=ssh ansible_user=root ansible_host=10.21.1.206 ansible_port=22 ceph_network_ip=150.130.10.22 vm_network_ip=150.132.10.14
+ceph-ansible-node1 ansible_connection=ssh ansible_user=root ansible_host=10.21.1.75 ansible_port=22 ceph_network_ip=192.168.122.84 vm_network_ip=10.21.1.75
+ceph-ansible-node2 ansible_connection=ssh ansible_user=root ansible_host=10.21.1.76 ansible_port=22 ceph_network_ip=192.168.122.85 vm_network_ip=10.21.1.76
+ceph-ansible-node3 ansible_connection=ssh ansible_user=root ansible_host=10.21.1.77 ansible_port=22 ceph_network_ip=192.168.122.86 vm_network_ip=10.21.1.77
 
 [OSD]
-ceph1
-ceph2
-ceph3
+ceph-ansible-node1
+ceph-ansible-node2
+ceph-ansible-node3
 
 [MON]
-ceph1
-ceph2
-ceph3
+ceph-ansible-node1
+ceph-ansible-node2
+ceph-ansible-node3
 
 [ADMIN]
-ceph1
+ceph-ansible-node1

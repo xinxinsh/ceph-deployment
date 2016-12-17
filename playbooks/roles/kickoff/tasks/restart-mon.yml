@@ -1,0 +1,10 @@
+---
+
+- name: reset authentication type to none
+  command: ssh root@{{mon_hostname}} sed -i "s/cephx/none/g" /etc/ceph/ceph.conf
+
+
+- name: restart ceph-mon
+  command: ssh root@{{mon_hostname}} systemctl restart ceph-mon@{{mon_hostname}}.service
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

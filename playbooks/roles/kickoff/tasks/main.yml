@@ -13,6 +13,11 @@
   loop_control:
     loop_var: osd_hostname
 
+- include: restart-mon.yml
+  with_items: "{{ groups.MON }}"
+  loop_control:
+    loop_var: mon_hostname
+
 - include: config-pg.yml
 
 - include: verify.yml

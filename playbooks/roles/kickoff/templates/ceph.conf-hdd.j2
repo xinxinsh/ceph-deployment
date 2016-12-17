@@ -1,8 +1,8 @@
 [global]
 fsid = {{ ceph_cluster_id.stdout }}
-auth_cluster_required = none
-auth_service_required = none
-auth_client_required = none
+auth_cluster_required = cephx
+auth_service_required = cephx
+auth_client_required = cephx
 mon_host = {% for mon_host in groups.MON -%}
                {{ hostvars[mon_host].vm_network_ip | mandatory }}{%- if not loop.last -%},{%- endif -%}
            {%- endfor %}
