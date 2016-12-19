@@ -1,10 +1,19 @@
 ---
 
-- name: reset authentication type to none
-  command: ssh root@{{mon_hostname}} sed -i "s/cephx/none/g" /etc/ceph/ceph.conf
-
+- name: reset authentication type to none in MON node
+  command: ssh root@{{item}} sed -i "s/cephx/none/g" /etc/ceph/ceph.conf
+  with_items: "{{ groups.MON }}"
 
 - name: restart ceph-mon
-  command: ssh root@{{mon_hostname}} systemctl restart ceph-mon@{{mon_hostname}}.service
+  command: ssh root@{{item}} systemctl restart ceph-mon@{{item}}.service
+  with_items: "{{ groups.MON }}"
+
+- name: reset anthentication type tp none in OSD node
+  command: ssh root@{{item}} sed -i "s/cephx/none/g" /etc/ceph/ceph.conf
+  with_items: "{{ groups.OSD }}"  
+
+- name: restart ceph-osd
+  command: ssh root@{{item}} systemctl restart ceph-osd.target
+  with_items: "{{ groups.OSD }}"
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

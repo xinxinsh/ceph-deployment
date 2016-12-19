@@ -13,17 +13,14 @@
   loop_control:
     loop_var: osd_hostname
 
-- include: restart-mon.yml
-  with_items: "{{ groups.MON }}"
-  loop_control:
-    loop_var: mon_hostname
-
 - include: config-pg.yml
-
-- include: verify.yml
 
 # When deploy openstack we need admin keyring
 - include: download_admin_keyring.yml
-  when: "{{ COPY_KEYRING }}"
+
+# change to none type authentication
+- include: restart-mon.yml
+
+- include: verify.yml
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
