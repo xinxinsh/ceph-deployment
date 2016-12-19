@@ -35,6 +35,9 @@
 
 - debug: var=pg_num
 
+- name: delete default rbd pool 
+  command: ceph osd pool delete rbd rbd --yes-i-really-really-mean-it
+
 - name: create openstack storage pool
   command: ceph osd pool create {{ item }} {{ pg_num }}
   with_items:
@@ -46,6 +49,5 @@
   with_items:
     - volumes
     - images
-    - rbd
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
