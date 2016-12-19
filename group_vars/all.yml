@@ -35,6 +35,12 @@ network_interfaces:
 #
 ClUSTER_TYPE: "S_HDD"
 
+#when deploy openstack we need admin keyring if cephx is enabled
+#openstack glance-api and nova-compute support only one backend,
+#so it should be set to "yes" only once;if you wanna glance-api and nova-compute
+#use this "ClUSTER_TYPE" backend, set it to yes;
+COPY_KEYRING: yes
+
 # Below is variables used to create local repo
 #
 INTERNAL_REPO_ENABLED: yes

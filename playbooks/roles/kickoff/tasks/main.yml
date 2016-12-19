@@ -24,5 +24,6 @@
 
 # When deploy openstack we need admin keyring
 - include: download_admin_keyring.yml
+  when: "{{ COPY_KEYRING }}"
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
