@@ -3,6 +3,6 @@
 #
 - name: Download admin keysring file to local /tmp
   fetch: src=/etc/ceph/ceph.client.admin.keyring dest=/tmp
-  when: COPY_KEYRING == 'yes'
+  when: COPY_KEYRING
 #
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
