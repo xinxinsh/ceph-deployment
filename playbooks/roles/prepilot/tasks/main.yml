@@ -30,6 +30,9 @@
   include: ssh_key_import.yml
   when: step_switch.ssh_key
 
+- name: create ceph user
+  include: create_ceph_user.yml
+
 - name: verify all configurations
   include: verify.yml
 

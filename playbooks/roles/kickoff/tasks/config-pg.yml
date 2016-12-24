@@ -23,11 +23,11 @@
   set_fact:
     osd_layout: "{{ ceph_osd_layouts[ceph_osd_layout_map[groups.OSD.0].osd] | mandatory }}"
 
-- assert:
-    that:
-      - "total_osd.stdout | int == (osd_layout | length * groups.OSD | length)"
-      - "up_osd.stdout | int == total_osd.stdout | int"
-      - "in_osd.stdout | int == total_osd.stdout | int"
+#- assert:
+#    that:
+#      - "total_osd.stdout | int == (osd_layout | length * groups.OSD | length)"
+#      - "up_osd.stdout | int == total_osd.stdout | int"
+#      - "in_osd.stdout | int == total_osd.stdout | int"
 
 - name: calculate pg number
   set_fact:
