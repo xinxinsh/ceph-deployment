@@ -6,7 +6,7 @@
 
 
 - name: change owner and group of journal cache
-  command: ssh {{osd_hostname}} "chown -R ceph:ceph /dev/{{ item.cache }}"
+  command: "chown -R ceph:ceph /dev/{{ item.cache }}"
   with_items: "{{ osd_layout | selectattr('use_cache') | list }}"
 
 - name: add OSD with journal cache
