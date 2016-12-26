@@ -21,7 +21,7 @@
   #    chdir: "{{ ceph_management_dir }}"
 
 - name: get ceph cluster fsid from existing ceph.conf
-  shell: ceph -s | grep cluster | awk '{print $NF}'
+  shell: ceph -s | grep -E "cluster " | awk '{print $NF}'
   register: ceph_cluster_id
   failed_when: "ceph_cluster_id.stdout | length < 36"
 
