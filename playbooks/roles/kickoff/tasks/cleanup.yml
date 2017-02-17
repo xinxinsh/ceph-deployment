@@ -1,0 +1,12 @@
+- name: cleanup osd config
+  command: rm -f /tmp/config-{{ osd_hostname }}-{{ disk.device }}.conf
+  with_items: "{{ osd_layout | list }}"
+  loop_control:
+    loop_var: disk
+
+- name: generate deploy osd script without journal
+  command: rm -f /tmp/osd-{{ osd_hostname }}-{{ disk.device }}.script
+  with_items: "{{ osd_layout | rejectattr('use_cache') | list }}"
+  loop_control:
+    loop_var: disk
+

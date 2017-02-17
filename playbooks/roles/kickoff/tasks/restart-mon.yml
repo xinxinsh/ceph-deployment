@@ -1,23 +1,23 @@
 ---
 
 - name: reset authentication type to none in MON node
-  command: sed -i "s/cephx/none/g" /etc/ceph/ceph.conf
+  command: ssh {{ item }} "sed -i "s/cephx/none/g" /etc/ceph/ceph.conf"
   with_items: "{{ groups.MON }}"
-  when: not COPY_KEYRING		
+  when: not COPY_KEYRING                
 
 - name: restart ceph-mon
-  command: systemctl restart ceph-mon@{{item}}.service
+  command: ssh {{ item }} "systemctl restart ceph-mon@{{item}}.service"
   with_items: "{{ groups.MON }}"
-  when: not COPY_KEYRING		
+  when: not COPY_KEYRING                
 
 - name: reset anthentication type tp none in OSD node
-  command: sed -i "s/cephx/none/g" /etc/ceph/ceph.conf
+  command: ssh {{ item }} "sed -i "s/cephx/none/g" /etc/ceph/ceph.conf"
   with_items: "{{ groups.OSD }}"  
-  when: not COPY_KEYRING		
+  when: not COPY_KEYRING                
 
 - name: restart ceph-osd
-  command: systemctl restart ceph-osd.target
+  command: ssh {{ item }} "systemctl restart ceph-osd.target"
   with_items: "{{ groups.OSD }}"
-  when: not COPY_KEYRING		
+  when: not COPY_KEYRING                
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

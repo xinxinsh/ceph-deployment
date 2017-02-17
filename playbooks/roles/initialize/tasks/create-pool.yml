@@ -1,6 +1,6 @@
 ---
-- pause: prompt="This is workaround!!! We found sometime osd need more time to online" minutes=1
-
+# create pools for openstack
+#
 - name: get OSD number
   shell: ceph -s | grep osdmap | sed 's/^.* \([0-9]\+\) osds.*/\1/'
   register: total_osd
@@ -35,19 +35,32 @@
 
 - debug: var=pg_num
 
-- name: delete default rbd pool 
-  command: ceph osd pool delete rbd rbd --yes-i-really-really-mean-it
-
 - name: create openstack storage pool
-  command: ceph osd pool create {{ item }} {{ pg_num }}
+  command: ceph osd pool create {{ item }} {{ pg_num }} hdd
   with_items:
     - volumes
     - images
+
+- name: create pools for different disk types
+  command: ceph osd pool create {{ item }} {{ pg_num }} {{ item }}
+  with_items: "{{ types | unique | list }}"
+
+- name: get replica size
+  set_fact:  
+    replicas: 3
+
+- name: get replica size
+  set_fact:  
+    replicas: "{{ groups.OSD | length | int }}"
+  when:  groups.OSD | length | int  < "{{ replicas }}"
+
+- debug: var=replicas
 
 - name: change pool replica number
-  command: ceph osd pool set {{ item }} size {{ groups.OSD | length }}
+  command: ceph osd pool set {{ item }} size {{ replicas | int }} 
   with_items:
     - volumes
     - images
+    - "{{ types | unique | list }}"
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

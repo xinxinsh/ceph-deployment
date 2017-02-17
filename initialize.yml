@@ -1,0 +1,11 @@
+# update crush map according to disk types
+# create rule set for different disk types
+# create pools for openstack on HDD 
+
+- name: update crush map of ceph cluster and create pools for openstack
+  hosts:
+    - ADMIN
+  roles:
+    - initialize
+  run_once: yes
+

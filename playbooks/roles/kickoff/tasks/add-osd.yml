@@ -9,16 +9,43 @@
   command: "ssh {{ osd_hostname }} chown -R ceph:ceph /dev/{{ item.cache }}"
   with_items: "{{ osd_layout | selectattr('use_cache') | list }}"
 
-- name: add OSD with journal cache
-  command: ceph-deploy --overwrite-conf osd create {{ osd_hostname }}:/dev/{{ item.device }}:/dev/{{ item.cache }}
-  args:
-    chdir: "{{ ceph_management_dir }}"
-  with_items: "{{ osd_layout | selectattr('use_cache') | list }}"
+- name: generate osd config
+  template:
+    backup: yes
+    src: "ceph.conf-{{ disk.type }}-osd.j2"
+    dest: "/tmp/config-{{ osd_hostname }}-{{ disk.device }}.conf"
+    mode: "744"
+  with_items: "{{ osd_layout | list }}"
+  loop_control:
+    loop_var: disk
 
-- name: add OSD without journal cache
-  command: ceph-deploy --overwrite-conf osd create {{ osd_hostname }}:/dev/{{ item.device }}
+- name: generate deploy osd script without journal
+  template:
+    backup: yes
+    src: "deploy-osd.script.j2"
+    dest: "/tmp/osd-{{ osd_hostname }}-{{ disk.device }}.script"
+    mode: "744"
+  with_items: "{{ osd_layout | rejectattr('use_cache') | list }}"
+  loop_control:
+    loop_var: disk
+
+- name: generate deploy osd script with journal
+  template:
+    backup: yes
+    src: "deploy-osd-journal.script.j2"
+    dest: "/tmp/osd-{{ osd_hostname }}-{{ disk.device }}.script"
+    mode: "744"
+  with_items: "{{ osd_layout | selectattr('use_cache') | list }}"
+  loop_control:
+    loop_var: disk
+
+
+- name: add OSD to cluster
+  command: /bin/bash /tmp/osd-{{ osd_hostname }}-{{ disk.device }}.script
   args:
     chdir: "{{ ceph_management_dir }}"
-  with_items: "{{ osd_layout | rejectattr('use_cache') | list }}"
+  with_items: "{{ osd_layout }}"
+  loop_control:
+    loop_var: disk
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

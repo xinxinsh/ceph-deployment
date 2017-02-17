@@ -1,0 +1,6 @@
+- name: generate crushmap script
+  command: rm -f /tmp/crushmap-{{ osd_hostname }}-{{ disk.device }}.script
+  with_items: "{{ osd_layout | list }}"
+  loop_control:
+    loop_var: disk
+

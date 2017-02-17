@@ -1,0 +1,10 @@
+#!/bin/bash
+
+id=`ssh {{osd_hostname}} cat /proc/mounts | grep {{ disk.device }} | cut -d" " -f2 | cut -d"-" -f2`
+crushhost={{ disk.type }}-{{ osd_hostname }}
+crushroot={{ disk.type }}
+
+ceph osd crush create-or-move osd.${id} 0 host=${crushhost} root=${crushroot}
+
+
+# vim: ft=sh:shiftwidth=4:tabstop=4:expandtab:softtabstop=4

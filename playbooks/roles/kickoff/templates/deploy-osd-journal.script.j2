@@ -1,0 +1,12 @@
+#!/bin/bash
+
+id=`ceph osd getmaxosd | cut -d" " -f3`
+conf={{ ceph_management_dir }}/ceph.conf
+osd_conf=/tmp/config-{{ osd_hostname }}-{{ disk.device }}.conf
+
+echo "[osd.${id}]" >> ${conf}
+cat ${osd_conf} >> ${conf}
+
+ceph-deploy --overwrite-conf osd create {{ osd_hostname }}:/dev/{{ disk.device }}:/dev/{{ disk.cache }}
+
+# vim: ft=sh:shiftwidth=4:tabstop=4:expandtab:softtabstop=4

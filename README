@@ -7,6 +7,8 @@ ansible-playbook provision.yml
 
 ansible-playbook install.yml
 
+ansible-playbook initialize.yml
+
 Some hints for group_vars/all.yml
 =========================================
 1. Each ceph node need two nics

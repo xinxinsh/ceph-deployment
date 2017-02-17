@@ -16,7 +16,7 @@ network_interfaces:
   - name: ceph_network
     nic: eth0
     prefix: 24
-    network: 192.168.122.0
+    network: 10.21.1.0
     use_bonding: no
     ip_addr_ref: ceph_network_ip
 
@@ -45,7 +45,7 @@ COPY_KEYRING: no
 #
 INTERNAL_REPO_ENABLED: yes
 
-INTERNAL_REPO_HOST: "mirrors.aliyun.com"
+INTERNAL_REPO_HOST: "10.21.1.10"
 
 INTERNAL_REPO_MIRRORS:
   - name: epel
@@ -114,18 +114,30 @@ ceph_osd_layouts:
   # 6 SATA + 3 SSD for OSDs
   # 1 SSD is sed as SATA journal
   ceph_osd_layout_1:
+    - device: vda
+      use_cache: no
+      cache: vdb1
+      use_type: yes
+      type: hdd
+    - device: vdb
+      use_cache: no
+      cache: vdb1
+      use_type: yes
+      type: edd
     - device: vdc
       use_cache: no
       cache: vdb1
+      use_type: yes
+      type: ssd
    
 ceph_osd_layout_map:
-  ceph-ansible-node1:
+  tt-master:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
-  ceph-ansible-node2:
+  tt-slave1:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
-  ceph-ansible-node3:
+  tt-slave2:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
  

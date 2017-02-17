@@ -1,0 +1,6 @@
+# remove rbd pool
+#
+- name: delete default rbd pool
+  command: ceph osd pool delete rbd rbd --yes-i-really-really-mean-it
+
+

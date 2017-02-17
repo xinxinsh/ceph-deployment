@@ -17,7 +17,6 @@ mon_host = {% for mon_host in groups.MON -%}
 
 mon_initial_members = {{ groups.MON | join(',') }}
 
-filestore_xattr_use_omap = true
 debug_lockdep = 0/0
 debug_context = 0/0
 debug_crush = 0/0
@@ -52,32 +51,3 @@ debug_rgw = 0/0
 mon_pg_warn_max_per_osd=5000
 mon_max_pool_pg_num=106496
 
-[osd]
-osd mkfs type = xfs
-osd mount options xfs = rw,noatime,,nodiratime,inode64,logbsize=256k,delaylog
-osd mkfs options xfs = -f -i size=2048
-filestore_queue_max_ops=5000
-filestore_queue_max_bytes = 1048576000
-filestore_max_sync_interval = 10
-filestore_merge_threshold = 500
-filestore_split_multiple = 100
-osd_op_shard_threads = 8
-journal_max_write_entries = 5000
-journal_max_write_bytes = 1048576000
-journal_queueu_max_ops = 3000
-journal_queue_max_bytes = 1048576000
-ms_dispatch_throttle_bytes = 1048576000
-objecter_inflight_op_bytes = 1048576000
-osd_op_num_threads_per_shard = 4
-osd_op_num_shards = 16
-
-[client]
-rbd_cache = true
-rbd_ssd_cache = true
-rbd_ssd_rcache = false
-rbd_cache_writethrough_until_flush = false
-rbd_ssd_cache_size = 0
-rbd_ssd_cache_chunk_order = 13
-rbd_ssd_cache_path = /rbd_cache/
-admin socket = /var/run/$cluster/$cluster-$type.$id.$pid.$cctid.asok
-log file = /var/log/$cluster/$cluster-$type.$id.$pid.$cctid.log

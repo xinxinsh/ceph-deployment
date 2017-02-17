@@ -1,0 +1,78 @@
+[global]
+fsid = {{ ceph_cluster_id.stdout }}
+pid_path = /var/run/ceph
+auth_service_required = cephx
+auth_cluster_required = cephx
+auth_client_required = cephx
+mon_host = {% for mon_host in groups.MON -%}
+               {{ hostvars[mon_host].vm_network_ip | mandatory }}{%- if not loop.last -%},{%- endif -%}
+           {%- endfor %}
+
+{% for item in network_interfaces -%}
+    {% if item.name == 'ceph_network' -%}
+        cluster_network = {{ item.network }}/{{ item.prefix }}
+    {% elif item.name == 'vm_network' -%}
+        public_network = {{ item.network }}/{{ item.prefix }}
+    {%- endif %}
+{%- endfor %}
+
+mon_initial_members = {{ groups.MON | join(',') }}
+
+debug objectcacher = 0
+debug paxos = 0
+debug journal = 0
+debug rados = 0
+debug refs = 0
+debug crypto = 0
+debug mds_balancer = 0
+debug civetweb = 0
+debug lockdep = 0
+debug auth = 0	
+debug mds_log = 0
+debug mon = 0
+debug monc = 0
+debug throttle = 0
+debug mds_migrator = 0
+debug client = 0
+debug rgw = 0
+debug finisher = 0
+debug journaler = 0
+debug bdev = 0
+debug ms = 0
+debug mds_locker = 0
+debug context = 0
+debug osd = 0
+debug bluestore = 0
+debug bluefs = 0
+enable_experimental_unrecoverable_data_corrupting_features = rocksdb
+debug objclass = 0
+debug objecter = 0
+debug filer = 0
+debug rocksdb = 0
+debug leveldb = 0
+debug striper = 0
+debug crush = 0
+debug optracker = 0
+debug tp = 0
+debug mds = 0
+debug rbd_mirror = 0
+debug rbd_replay = 0
+debug heartbeatmap = 0
+debug buffer = 0
+debug asok = 0
+debug rbd = 0
+debug filestore = 0
+debug timer = 0
+debug mds_log_expire = 0
+throttler_perf_counter = False
+objecter_infilght_op_bytes = 1048576000
+ms_dispatch_throttle_bytes = 1048576000
+mon_pg_warn_max_per_osd = 10000
+mon_osd_max_split_count = 10000
+objecter_inflight_ops = 102400
+
+[client]
+rbd_cache = False
+admin socket = /var/run/$cluster/$cluster-$type.$id.$pid.$cctid.asok
+log file = /var/log/$cluster/$cluster-$type.$id.$pid.$cctid.log
+	

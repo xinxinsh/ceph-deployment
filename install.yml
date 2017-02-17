@@ -14,14 +14,11 @@
   roles:
     - install
 
-
-
 - name: configure and start ceph services
   hosts:
     - ADMIN
   roles:
     - kickoff
   run_once: yes
-
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

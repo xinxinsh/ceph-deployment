@@ -1,0 +1,13 @@
+#cleanup origin buckets
+#
+- name: remove stale buckets
+  command: ceph osd crush remove {{ osd_hostname }}
+  with_items: "{{ groups.OSD }}"
+  loop_control:
+    loop_var: osd_hostname
+
+- name: remove stale ruleset
+  command: ceph osd crush rule rm replicated_ruleset
+
+- name: remove default root
+  command: ceph osd crush remove default

@@ -1,7 +1,8 @@
 ---
 # tasks file for kickoff
 
-- include: create-config.yml
+# create monitors
+- include: create-mon.yml
 
 - include: zap-disk.yml
   with_items: "{{ groups.OSD }}"
@@ -13,7 +14,10 @@
   loop_control:
     loop_var: osd_hostname
 
-- include: config-pg.yml
+- include: cleanup.yml
+  with_items: "{{ groups.OSD }}"
+  loop_control:
+    loop_var: osd_hostname
 
 # When deploy openstack we need admin keyring
 - include: download_admin_keyring.yml

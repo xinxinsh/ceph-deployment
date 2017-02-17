@@ -1,0 +1,59 @@
+[2017-02-15 10:35:30,518][ceph_deploy.conf][DEBUG ] found configuration file at: /root/.cephdeploy.conf
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ] Invoked (1.5.36): /usr/bin/ceph-deploy purgedata tt-slave1 tt-slave2 tt-master
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ] ceph-deploy options:
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ]  username                      : None
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ]  verbose                       : False
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ]  overwrite_conf                : False
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ]  quiet                         : False
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ]  cd_conf                       : <ceph_deploy.conf.cephdeploy.Conf instance at 0x1b86b48>
+[2017-02-15 10:35:30,518][ceph_deploy.cli][INFO  ]  cluster                       : ceph
+[2017-02-15 10:35:30,519][ceph_deploy.cli][INFO  ]  host                          : ['tt-slave1', 'tt-slave2', 'tt-master']
+[2017-02-15 10:35:30,519][ceph_deploy.cli][INFO  ]  func                          : <function purgedata at 0x1af31b8>
+[2017-02-15 10:35:30,519][ceph_deploy.cli][INFO  ]  ceph_conf                     : None
+[2017-02-15 10:35:30,519][ceph_deploy.cli][INFO  ]  default_release               : False
+[2017-02-15 10:35:30,519][ceph_deploy.install][DEBUG ] Purging data from cluster ceph hosts tt-slave1 tt-slave2 tt-master
+[2017-02-15 10:35:30,739][tt-slave1][DEBUG ] connected to host: tt-slave1 
+[2017-02-15 10:35:30,740][tt-slave1][DEBUG ] detect platform information from remote host
+[2017-02-15 10:35:30,758][tt-slave1][DEBUG ] detect machine type
+[2017-02-15 10:35:30,763][tt-slave1][DEBUG ] find the location of an executable
+[2017-02-15 10:35:30,983][tt-slave2][DEBUG ] connected to host: tt-slave2 
+[2017-02-15 10:35:30,983][tt-slave2][DEBUG ] detect platform information from remote host
+[2017-02-15 10:35:31,002][tt-slave2][DEBUG ] detect machine type
+[2017-02-15 10:35:31,007][tt-slave2][DEBUG ] find the location of an executable
+[2017-02-15 10:35:31,038][tt-master][DEBUG ] connected to host: tt-master 
+[2017-02-15 10:35:31,039][tt-master][DEBUG ] detect platform information from remote host
+[2017-02-15 10:35:31,057][tt-master][DEBUG ] detect machine type
+[2017-02-15 10:35:31,061][tt-master][DEBUG ] find the location of an executable
+[2017-02-15 10:35:31,265][tt-slave1][DEBUG ] connected to host: tt-slave1 
+[2017-02-15 10:35:31,266][tt-slave1][DEBUG ] detect platform information from remote host
+[2017-02-15 10:35:31,284][tt-slave1][DEBUG ] detect machine type
+[2017-02-15 10:35:31,289][ceph_deploy.install][INFO  ] Distro info: CentOS Linux 7.2.1511 Core
+[2017-02-15 10:35:31,289][tt-slave1][INFO  ] purging data on tt-slave1
+[2017-02-15 10:35:31,291][tt-slave1][INFO  ] Running command: rm -rf --one-file-system -- /var/lib/ceph
+[2017-02-15 10:35:31,304][tt-slave1][WARNING] OSDs may still be mounted, trying to unmount them
+[2017-02-15 10:35:31,305][tt-slave1][INFO  ] Running command: find /var/lib/ceph -mindepth 1 -maxdepth 2 -type d -exec umount {} ;
+[2017-02-15 10:35:31,316][tt-slave1][WARNING] umount: /var/lib/ceph/osd: not mounted
+[2017-02-15 10:35:31,332][tt-slave1][INFO  ] Running command: rm -rf --one-file-system -- /var/lib/ceph
+[2017-02-15 10:35:31,344][tt-slave1][INFO  ] Running command: rm -rf --one-file-system -- /etc/ceph/
+[2017-02-15 10:35:31,560][tt-slave2][DEBUG ] connected to host: tt-slave2 
+[2017-02-15 10:35:31,561][tt-slave2][DEBUG ] detect platform information from remote host
+[2017-02-15 10:35:31,579][tt-slave2][DEBUG ] detect machine type
+[2017-02-15 10:35:31,583][ceph_deploy.install][INFO  ] Distro info: CentOS Linux 7.2.1511 Core
+[2017-02-15 10:35:31,583][tt-slave2][INFO  ] purging data on tt-slave2
+[2017-02-15 10:35:31,585][tt-slave2][INFO  ] Running command: rm -rf --one-file-system -- /var/lib/ceph
+[2017-02-15 10:35:31,595][tt-slave2][WARNING] OSDs may still be mounted, trying to unmount them
+[2017-02-15 10:35:31,596][tt-slave2][INFO  ] Running command: find /var/lib/ceph -mindepth 1 -maxdepth 2 -type d -exec umount {} ;
+[2017-02-15 10:35:31,606][tt-slave2][WARNING] umount: /var/lib/ceph/osd: not mounted
+[2017-02-15 10:35:31,623][tt-slave2][INFO  ] Running command: rm -rf --one-file-system -- /var/lib/ceph
+[2017-02-15 10:35:31,635][tt-slave2][INFO  ] Running command: rm -rf --one-file-system -- /etc/ceph/
+[2017-02-15 10:35:31,676][tt-master][DEBUG ] connected to host: tt-master 
+[2017-02-15 10:35:31,676][tt-master][DEBUG ] detect platform information from remote host
+[2017-02-15 10:35:31,695][tt-master][DEBUG ] detect machine type
+[2017-02-15 10:35:31,699][ceph_deploy.install][INFO  ] Distro info: CentOS Linux 7.2.1511 Core
+[2017-02-15 10:35:31,699][tt-master][INFO  ] purging data on tt-master
+[2017-02-15 10:35:31,700][tt-master][INFO  ] Running command: rm -rf --one-file-system -- /var/lib/ceph
+[2017-02-15 10:35:31,709][tt-master][WARNING] OSDs may still be mounted, trying to unmount them
+[2017-02-15 10:35:31,710][tt-master][INFO  ] Running command: find /var/lib/ceph -mindepth 1 -maxdepth 2 -type d -exec umount {} ;
+[2017-02-15 10:35:31,721][tt-master][WARNING] umount: /var/lib/ceph/osd: not mounted
+[2017-02-15 10:35:31,737][tt-master][INFO  ] Running command: rm -rf --one-file-system -- /var/lib/ceph
+[2017-02-15 10:35:31,749][tt-master][INFO  ] Running command: rm -rf --one-file-system -- /etc/ceph/

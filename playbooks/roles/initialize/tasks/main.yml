@@ -1,0 +1,32 @@
+---
+# tasks file for update crush map and create pools for opsntack
+
+# remove rbd pool
+- include: remove-pool.yml
+
+# update crush map according disk type
+- include: crushmap.yml
+  with_items: "{{ groups.OSD }}"
+  loop_control:
+    loop_var: osd_hostname
+
+- include: delfile.yml
+  with_items: "{{ groups.OSD }}"
+  loop_control:
+    loop_var: osd_hostname
+
+# cleanup rule sets
+- include: cleanup.yml
+
+# cleanup rule sets
+- include: config.yml
+
+# create a new rule for pools
+- include: ruleset.yml
+
+# create pools for openstack
+- include: create-pool.yml
+
+- include: create-config.yml
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
