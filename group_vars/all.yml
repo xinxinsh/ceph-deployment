@@ -39,7 +39,7 @@ ClUSTER_TYPE: "S_HDD"
 #openstack glance-api and nova-compute support only one backend,
 #so it should be set to "yes" only once;if you wanna glance-api and nova-compute
 #use this "ClUSTER_TYPE" backend, set it to yes;
-COPY_KEYRING: yes
+COPY_KEYRING: no
 
 # Below is variables used to create local repo
 #
