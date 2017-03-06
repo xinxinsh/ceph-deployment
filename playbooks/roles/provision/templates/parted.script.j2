@@ -9,8 +9,14 @@ parted --script "/dev/{{ disk.device | escape }}" \
     q
 
 sleep 2
+
+# partitions formatted by ourself do not set type code, so the udev rules of change disk 
+# permission does not trigger, set the type code for every journal partitions
+# Fix issues: http://jira.chinac.com/browse/NEOCU-2454
+JOURNAL_TYPECODE=45b0969e-9b03-4f30-b4c6-b4b80ceff106
+
 {% for part in disk.partitions %}
-chown -R ceph:ceph /dev/{{ disk.device }}{{ loop.index }}
+/usr/sbin/sgdisk --typecode={{ loop.index }}:${JOURNAL_TYPECODE} -- /dev/{{ disk.device }}
 {% endfor %}
 
 
