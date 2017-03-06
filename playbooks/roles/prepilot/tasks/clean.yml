@@ -1,0 +1,8 @@
+
+- name: purge cluster
+  command: "ceph-deploy purge {{ groups['all'] | join(' ') }}"
+  when: "inventory_hostname in groups.ADMIN"
+
+- name: purgedata cluster
+  command: "ceph-deploy purgedata {{ groups['all'] | join(' ') }}"
+  when: "inventory_hostname in groups.ADMIN"

@@ -33,6 +33,9 @@
 - name: create ceph user
   include: create_ceph_user.yml
 
+- name: clean fields
+  include: clean.yml
+
 - name: verify all configurations
   include: verify.yml
 
