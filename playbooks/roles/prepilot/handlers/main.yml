@@ -1,2 +1,4 @@
 ---
 # handlers file for prepilot
+- name: restart ntpd
+  service: name=ntpd state=restarted

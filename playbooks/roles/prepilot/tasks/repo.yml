@@ -21,6 +21,8 @@
     enabled: 1
     gpgcheck: no
     priority: "{{ item.priority | default(99) }}"
+    #sslclientcert: "{{ item.sslclientcert | default('') }}"
+    #sslclientkey: "{{ item.sslclientkey | default('') }}"
   with_items: "{{ INTERNAL_REPO_MIRRORS }}"
   when: INTERNAL_REPO_ENABLED
 

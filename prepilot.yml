@@ -2,6 +2,7 @@
 # This playbook deploys chinac Neo CloudUltra management platform
 
 - name: execute prepilot preparations and checks
+  any_errors_fatal: true
   hosts:
     - ADMIN
     - OSD
