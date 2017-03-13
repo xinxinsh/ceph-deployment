@@ -9,6 +9,14 @@
   until: pkg_inst_result|success
   retries: 3
 
+- name: install gdisk
+  yum: name={{ item }}
+  with_items:
+     - gdisk
+  register: pkg_inst_result
+  until: pkg_inst_result|success
+  retries: 3
+
 - name: setup network interfaces
   include: network-interfaces.yml
   with_items: "{{ network_interfaces }}"
