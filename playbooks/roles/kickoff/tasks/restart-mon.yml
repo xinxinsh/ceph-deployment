@@ -5,14 +5,14 @@
   with_items: "{{ groups.MON }}"
   when: not COPY_KEYRING                
 
-- name: restart ceph-mon
-  command: ssh {{ item }} "systemctl restart ceph-mon@{{item}}.service"
-  with_items: "{{ groups.MON }}"
-  when: not COPY_KEYRING                
-
 - name: reset anthentication type tp none in OSD node
   command: ssh {{ item }} "sed -i "s/cephx/none/g" /etc/ceph/ceph.conf"
   with_items: "{{ groups.OSD }}"  
+  when: not COPY_KEYRING                
+
+- name: restart ceph-mon
+  command: ssh {{ item }} "systemctl restart ceph-mon@{{item}}.service"
+  with_items: "{{ groups.MON }}"
   when: not COPY_KEYRING                
 
 - name: restart ceph-osd
