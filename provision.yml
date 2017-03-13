@@ -2,6 +2,7 @@
 # This playbook deploys chinac Neo CloudUltra management platform
 
 - name: partition and format related disks
+  any_errors_fatal: true
   hosts:
     - OSD
   roles:

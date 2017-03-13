@@ -46,6 +46,9 @@ COPY_KEYRING: no
 INTERNAL_REPO_ENABLED: yes
 
 INTERNAL_REPO_HOST: "10.21.1.10"
+#when deploy ceph use public network internal repo,
+#we need uncomment sslclientcert and sslclientkey,also do it in repo.yml file
+#also edit "http" to https,
 
 INTERNAL_REPO_MIRRORS:
   - name: epel
@@ -53,31 +56,48 @@ INTERNAL_REPO_MIRRORS:
     # libboost lttng cannot be found in internal repo
     #baseurl: "{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
     baseurl: "http://{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: base
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/os/$basearch/"
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/os/$basearch/" 
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: updates
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/updates/$basearch/"
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/updates/$basearch/" 
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: extras
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/extras/$basearch/"
+    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/extras/$basearch/"   
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph
     file: ceph-jewel
     baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/noarch/"
-    priority: 1
+    priority: 1 
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-noarch
     file: ceph-jewel
     baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/noarch/"
-    priority: 1
+    priority: 1   
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-x86_64
     file: ceph-jewel
     baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/x86_64/"
-    priority: 1
+    priority: 1 
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-source
     file: ceph-jewel
     baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/SRPMS/"
-    priority: 1
+    priority: 1 
+    #sslclientcert: "/etc/pki/internal/yum.pem"
+    #sslclientkey: "/etc/pki/internal/yum-key.pem"
+
 
 
 # Below is repo for Chinac only

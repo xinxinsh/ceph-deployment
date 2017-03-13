@@ -39,4 +39,7 @@
 - name: verify all configurations
   include: verify.yml
 
+- name: install ntp
+  include: ntp.yml
+  tags: ntp
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

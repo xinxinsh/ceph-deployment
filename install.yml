@@ -1,12 +1,14 @@
 ---
 
 - name: install admin packages
+  any_errors_fatal: true
   hosts:
     - ADMIN
   roles:
     - install-admin
 
 - name: install ceph packages
+  any_errors_fatal: true
   hosts:
     - ADMIN
     - OSD
@@ -15,6 +17,7 @@
     - install
 
 - name: configure and start ceph services
+  any_errors_fatal: true
   hosts:
     - ADMIN
   roles:
