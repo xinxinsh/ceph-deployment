@@ -1,7 +1,9 @@
 ---
+- name: delete rbd pool
+  command: ssh {{ groups.MON[0] }} "ceph osd pool delete rbd rbd --yes-i-really-really-mean-it"
 
 - name: check ceph health
-  command: ceph health
+  command: ssh {{ groups.MON[0] }} "ceph health"
   register: rc
   until: rc.stdout == 'HEALTH_OK'
   retries: 10
