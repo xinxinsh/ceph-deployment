@@ -1,9 +1,6 @@
 ---
 # tasks file for update crush map and create pools for opsntack
 
-# remove rbd pool
-- include: remove-pool.yml
-
 # update crush map according disk type
 - include: crushmap.yml
   with_items: "{{ groups.OSD }}"

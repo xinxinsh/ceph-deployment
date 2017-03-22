@@ -2,9 +2,9 @@
     msg: "Disk Types in cleanup {{ types | unique }}"
 
 - name: remove stale ruleset
-  command: ceph osd crush rule rm replicated_ruleset
+  command: ssh {{ groups.MON[0] }} "ceph osd crush rule rm replicated_ruleset"
 
 - name: generate crushmap ruleset for different disk types
-  command: ceph osd crush rule create-simple {{ item }} {{ item }} host
+  command: ssh {{ groups.MON[0] }} "ceph osd crush rule create-simple {{ item }} {{ item }} host"
   with_items: "{{ types | unique | list}}"
 
