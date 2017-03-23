@@ -8,21 +8,6 @@
 - name: install ceph-deploy
   yum: name="{{CEPH_DPLOY_RPM_URL}}"
 
-- name: prompt dangourous behavior again
-  pause:
-    prompt: |-
-      !!!!!!!! IMPORTANT !!!!!!!!
-      Again, do you really want to PURGE Ceph Cluster
-      will be UNRECOVERABLY DELETED after partition and format.  Are you sure to
-      continue? (Enter to start for real, press CTRL-C then A to abort)
-
-
-- name: purge cluster
-  command: "ceph-deploy purge {{ groups['all'] | join(' ') }}"
-  when: "inventory_hostname in groups.ADMIN"
-
-- name: purgedata cluster
-  command: "ceph-deploy purgedata {{ groups['all'] | join(' ') }}"
-  when: "inventory_hostname in groups.ADMIN"
+- include: purgecluster.yml
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

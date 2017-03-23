@@ -1,0 +1,9 @@
+---
+
+
+- include: zap-disk.yml
+  with_items: "{{ groups.OSD }}"
+  loop_control:
+    loop_var: osd_hostname
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

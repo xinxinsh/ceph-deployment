@@ -22,7 +22,7 @@ tt-slave1
 tt-slave2
 
 [MON]
-tt-master
+tt-slave1
 
 [ADMIN]
 tt-master
