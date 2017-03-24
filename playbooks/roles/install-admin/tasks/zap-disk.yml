@@ -1,0 +1,28 @@
+---
+
+- name: load OSD layout
+  set_fact:
+    osd_layout: "{{ ceph_osd_layouts[ceph_osd_layout_map[osd_hostname].osd] | mandatory }}"
+
+- name: get osd device
+  set_fact:
+    #devices: "{{ devices | default([]) + [item.device] }}"
+    devices: "{{ devices | default([]) + [item.device | regex_replace('^([a-z]+)[0-9]+$', '\\1')] }}"
+  with_items: "{{ osd_layout | list }}"
+
+- debug:
+    msg: "OSD Devices {{ devices | unique }}"
+
+- name: zap each OSD partition
+  command: ssh {{ osd_hostname }} "sgdisk --zap-all -- /dev/{{ item }}"
+  args:
+    chdir: "{{ ceph_management_dir }}"
+  with_items: "{{ devices | unique }}"
+
+- name: clear each OSD partition
+  command: ssh {{ osd_hostname }} "sgdisk --clear --mbrtogpt -- /dev/{{ item }}"
+  args:
+    chdir: "{{ ceph_management_dir }}"
+  with_items: "{{ devices | unique }}"
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

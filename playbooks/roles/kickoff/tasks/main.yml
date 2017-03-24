@@ -4,11 +4,6 @@
 # create monitors
 - include: create-mon.yml
 
-- include: zap-disk.yml
-  with_items: "{{ groups.OSD }}"
-  loop_control:
-    loop_var: osd_hostname
-
 - include: add-osd.yml
   with_items: "{{ groups.OSD }}"
   loop_control:

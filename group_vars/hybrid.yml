@@ -126,6 +126,20 @@ disk_partition_layouts:
   disk_partition_layout1:
     - device: vdb
       partitions:
+      - percent: [4096s, 5%]
+        name: journal01
+        filesystem: xfs
+      - percent: [5%, 10%]
+        name: journal02
+        filesystem: xfs
+      - percent: [10%, 55%]
+        name: data01
+        filesystem: xfs
+      - percent: [55%, 100%]
+        name: data02
+        filesystem: xfs
+    - device: vdc
+      partitions:
       - percent: [4096s, 100%]
         name: journal01
         filesystem: xfs
@@ -135,25 +149,22 @@ ceph_osd_layouts:
   # 1 SSD is sed as SATA journal
   ceph_osd_layout_1:
     - device: vda
-      use_cache: no
-      cache: vdb1
+      use_cache: yes
+      cache: vdc1
       use_type: yes
       type: hdd
-    - device: vdb
-      use_cache: no
+    - device: vdb3
+      use_cache: yes
       cache: vdb1
       use_type: yes
-      type: edd
-    - device: vdc
-      use_cache: no
+      type: ssd
+    - device: vdb4
+      use_cache: yes
       cache: vdb2
       use_type: yes
       type: ssd
    
 ceph_osd_layout_map:
-  tt-master:
-    partition: disk_partition_layout1
-    osd: ceph_osd_layout_1
   tt-slave1:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1

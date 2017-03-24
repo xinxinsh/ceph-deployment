@@ -1,6 +1,30 @@
 ---
 # This playbook deploys chinac Neo CloudUltra management platform
 
+- name: install admin packages
+  any_errors_fatal: true
+  hosts:
+    - ADMIN
+  roles:
+    - install-admin
+
+- name: install ceph packages
+  any_errors_fatal: true
+  hosts:
+    - ADMIN
+    - OSD
+    - MON
+  roles:
+    - install
+#
+- name: zap disk
+  any_errors_fatal: true
+  hosts:
+    - ADMIN
+  roles:
+    - zap
+
+
 - name: partition and format related disks
   any_errors_fatal: true
   hosts:

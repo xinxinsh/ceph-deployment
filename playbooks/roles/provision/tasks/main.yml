@@ -1,5 +1,6 @@
 ---
 
+
 - include: partition.yml
   when: step_switch.partition
 
