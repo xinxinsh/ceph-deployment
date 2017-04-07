@@ -9,10 +9,11 @@
   until: pkg_inst_result|success
   retries: 3
 
-- name: install gdisk
+- name: install gdisk & systemd
   yum: name={{ item }}
   with_items:
      - gdisk
+     - systemd
   register: pkg_inst_result
   until: pkg_inst_result|success
   retries: 3
