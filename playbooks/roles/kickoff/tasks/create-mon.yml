@@ -21,9 +21,11 @@
   #    chdir: "{{ ceph_management_dir }}"
 
 - name: get ceph cluster fsid from existing ceph.conf
-  shell: ssh {{ groups.MON[0] }} "ceph -s | grep -E "cluster " | awk '{print $NF}'"
+  shell: ssh {{ groups.MON[0] }} "ceph-conf --lookup fsid"
   register: ceph_cluster_id
   failed_when: "ceph_cluster_id.stdout | length < 36"
+
+- debug: var={{ ceph_cluster_id }}
 
 - name: generate global config
   template:
