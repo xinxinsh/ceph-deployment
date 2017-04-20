@@ -122,6 +122,10 @@ DOWNLOAD_FOLDER: /opt/download
 
 CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
 
+# in order to support multiple osds on single disk, partitions maybe used for data store,
+# so from now, paritions are used for two types: OSD or journal
+# for OSD type, the name value should start with "data", such as data01 or data02
+# for journal type, the name value should start with "journal", such as journal01 or journal02
 disk_partition_layouts:
   disk_partition_layout1:
     - device: vdb
@@ -129,6 +133,35 @@ disk_partition_layouts:
       - percent: [4096s, 100%]
         name: journal01
         filesystem: xfs
+ 
+ceph_osd_layouts:
+  # 1 SSD is sed as SATA journal
+  ceph_osd_layout_1:
+    - device: vda
+      use_cache: no
+      cache: vdb1
+      use_type: yes
+      type: hdd
+    - device: vdb
+      use_cache: no
+      cache: vdb1
+      use_type: yes
+      type: hdd
+    - device: vdc
+      use_cache: no
+      cache: vdb2
+      use_type: yes
+      type: hdd
+   
+ceph_osd_layout_map:
+  tt-master:
+    partition: disk_partition_layout1
+    osd: ceph_osd_layout_1
+  tt-slave1:
+    partition: disk_partition_layout1
+    osd: ceph_osd_layout_1
+ 
+ceph_management_dir: /root/ceph-management/
  
 ceph_osd_layouts:
   # 6 SATA + 3 SSD for OSDs
@@ -141,23 +174,20 @@ ceph_osd_layouts:
       type: hdd
     - device: vdb
       use_cache: no
-      cache: vdb1
+      cache: vdb2
       use_type: yes
-      type: edd
+      type: hdd
     - device: vdc
       use_cache: no
       cache: vdb2
       use_type: yes
-      type: ssd
+      type: hdd
    
 ceph_osd_layout_map:
   tt-master:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
   tt-slave1:
-    partition: disk_partition_layout1
-    osd: ceph_osd_layout_1
-  tt-slave2:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
  
