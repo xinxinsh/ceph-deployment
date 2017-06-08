@@ -35,17 +35,17 @@
 
 - debug: var=pg_num
 
-- name: create openstack storage pool
-  command: ssh {{ groups.MON[0] }} "ceph osd pool create {{ item }} {{ pg_num }} hdd"
-  with_items:
-    - volumes
-    - images
-
 - debug: var=types
 
 - name: create pools for different disk types
   command: ssh {{ groups.MON[0] }} "ceph osd pool create {{ item }} {{ pg_num }} {{ item }}"
   with_items: "{{ types | unique | list }}"
+
+- name: create openstack storage pool
+  command: ssh {{ groups.MON[0] }} "ceph osd pool create {{ item }} {{ pg_num }}"
+  with_items:
+    - volumes
+    - images
 
 - name: get replica size
   set_fact:  
