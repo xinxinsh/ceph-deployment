@@ -75,25 +75,25 @@ INTERNAL_REPO_MIRRORS:
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph
     file: ceph-jewel
-    baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/noarch/"
+    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/noarch/"
     priority: 1 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-noarch
     file: ceph-jewel
-    baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/noarch/"
+    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/noarch/"
     priority: 1   
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-x86_64
     file: ceph-jewel
-    baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/x86_64/"
+    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/x86_64/"
     priority: 1 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-source
     file: ceph-jewel
-    baseurl: "http://172.16.24.35/ceph-rpm/jemalloc/SRPMS/"
+    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/SRPMS/"
     priority: 1 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
