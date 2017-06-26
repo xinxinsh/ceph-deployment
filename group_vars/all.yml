@@ -134,6 +134,7 @@ disk_partition_layouts:
         name: journal01
         filesystem: xfs
  
+# if you don't have a seperate journal, please set steps.partition to no
 ceph_osd_layouts:
   # 1 SSD is sed as SATA journal
   ceph_osd_layout_1:
