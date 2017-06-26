@@ -47,5 +47,6 @@
 
 - name: install ntp
   include: ntp.yml
+  when: step_switch.ntp
   tags: ntp
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

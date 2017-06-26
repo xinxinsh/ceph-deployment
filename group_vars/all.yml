@@ -10,6 +10,7 @@ step_switch:
   ssh_key: yes
   partition: yes
   repo: yes
+  ntp: yes
 
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
