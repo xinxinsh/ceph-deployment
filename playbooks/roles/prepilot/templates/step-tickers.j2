@@ -1,9 +1,0 @@
-# List of NTP servers used by the ntpdate service.
-{% if ansible_hostname == groups.MON[0] %}
-  # And use the current local time as a fallback of that
-   127.127.1.0
-  
-{% else %}
-# Only use the time lord for time
-{{ hostvars[groups.MON[0]].vm_network_ip | mandatory }} 
-{% endif %}
