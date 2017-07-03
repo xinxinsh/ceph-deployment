@@ -46,7 +46,8 @@ COPY_KEYRING: no
 #
 INTERNAL_REPO_ENABLED: yes
 
-INTERNAL_REPO_HOST: "10.21.1.10"
+INTERNAL_CENTOS_REPO_HOST: "10.21.1.10"
+INTERNAL_CEPH_REPO_HOST: "123.59.199.64"
 #when deploy ceph use public network internal repo,
 #we need uncomment sslclientcert and sslclientkey,also do it in repo.yml file
 #also edit "http" to https,
@@ -56,45 +57,45 @@ INTERNAL_REPO_MIRRORS:
     file: epel
     # libboost lttng cannot be found in internal repo
     #baseurl: "{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/epel/$releasever/$basearch/"
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: base
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/os/$basearch/" 
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/centos/$releasever/os/$basearch/" 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: updates
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/updates/$basearch/" 
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/centos/$releasever/updates/$basearch/" 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: extras
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_REPO_HOST }}/centos/$releasever/extras/$basearch/"   
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/centos/$releasever/extras/$basearch/"   
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph
     file: ceph-jewel
-    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/noarch/"
+    baseurl: "http://{{ INTERNAL_CEPH_REPO_HOST }}/ceph-rpm/jemalloc/noarch/"
     priority: 1 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-noarch
     file: ceph-jewel
-    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/noarch/"
+    baseurl: "http://{{ INTERNAL_CEPH_REPO_HOST }}/ceph-rpm/jemalloc/noarch/"
     priority: 1   
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-x86_64
     file: ceph-jewel
-    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/x86_64/"
+    baseurl: "http://{{ INTERNAL_CEPH_REPO_HOST }}/ceph-rpm/jemalloc/x86_64/"
     priority: 1 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
   - name: Ceph-source
     file: ceph-jewel
-    baseurl: "http://123.59.199.64/ceph-rpm/jemalloc/SRPMS/"
+    baseurl: "http://{{ INTERNAL_CEPH_REPO_HOST }}/ceph-rpm/jemalloc/SRPMS/"
     priority: 1 
     #sslclientcert: "/etc/pki/internal/yum.pem"
     #sslclientkey: "/etc/pki/internal/yum-key.pem"
