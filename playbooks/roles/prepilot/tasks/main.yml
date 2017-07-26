@@ -1,6 +1,10 @@
 ---
 # tasks file for prepilot
 
+- name: use local repository
+  include: repo.yml
+  when: step_switch.repo
+
 - name: install libselinux-python
   yum: name={{ item }}
   with_items:
@@ -26,10 +30,6 @@
 - name: setup hosts file
   include: hosts-config.yml
   when: step_switch.hostname
-
-- name: use local repository
-  include: repo.yml
-  when: step_switch.repo
 
 - name: disable selinux
   include: selinux.yml

@@ -4,7 +4,7 @@
 # some operations could be time consuming and users may want to skip them
 # totally even though they are idempotent
 step_switch:
-  nic: no
+  nic: yes
   hostname: yes
   selinux: yes
   ssh_key: yes
@@ -46,7 +46,7 @@ COPY_KEYRING: no
 #
 INTERNAL_REPO_ENABLED: yes
 
-INTERNAL_CENTOS_REPO_HOST: "10.21.1.10"
+INTERNAL_CENTOS_REPO_HOST: "220.231.201.236"
 INTERNAL_CEPH_REPO_HOST: "123.59.199.64"
 #when deploy ceph use public network internal repo,
 #we need uncomment sslclientcert and sslclientkey,also do it in repo.yml file
@@ -55,74 +55,33 @@ INTERNAL_CEPH_REPO_HOST: "123.59.199.64"
 INTERNAL_REPO_MIRRORS:
   - name: epel
     file: epel
-    # libboost lttng cannot be found in internal repo
-    #baseurl: "{{ INTERNAL_REPO_HOST }}/epel/$releasever/$basearch/"
-    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/epel/$releasever/$basearch/"
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/data/centos/epel-chinac/$releasever/$basearch/"
   - name: base
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/centos/$releasever/os/$basearch/" 
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/data/centos7-2/mirror.centos.org/centos-7/$releasever/os/$basearch/"
   - name: updates
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/centos/$releasever/updates/$basearch/" 
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/data/centos7-2/mirror.centos.org/centos-7/$releasever/updates/$basearch/"
   - name: extras
     file: CentOS-Base
-    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/centos/$releasever/extras/$basearch/"   
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
-  - name: Ceph
-    file: ceph-jewel
-    baseurl: "https://{{ INTERNAL_CEPH_REPO_HOST }}/ceph/jemalloc/noarch/"
-    priority: 1 
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
+    baseurl: "http://{{ INTERNAL_CENTOS_REPO_HOST }}/data/centos7-2/mirror.centos.org/centos-7/$releasever/extras/$basearch/"
   - name: Ceph-noarch
     file: ceph-jewel
-    baseurl: "https://{{ INTERNAL_CEPH_REPO_HOST }}/ceph/jemalloc/noarch/"
+    baseurl: "https://{{ INTERNAL_CEPH_REPO_HOST }}/repos/ceph/jemalloc/noarch/"
     priority: 1   
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
-  - name: Ceph-x86_64
-    file: ceph-jewel
-    baseurl: "https://{{ INTERNAL_CEPH_REPO_HOST }}/ceph/jemalloc/x86_64/"
-    priority: 1 
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
-  - name: Ceph-source
-    file: ceph-jewel
-    baseurl: "https://{{ INTERNAL_CEPH_REPO_HOST }}/ceph/jemalloc/SRPMS/"
-    priority: 1 
-    #sslclientcert: "/etc/pki/internal/yum.pem"
-    #sslclientkey: "/etc/pki/internal/yum-key.pem"
-
-
-
-# Below is repo for Chinac only
-CHINAC_REPO_ENABLED: no
-CHINAC_REPO_MIRROS:
-  - name: centos-openstack-mitaka
-    file: CentOS-OpenStack-mitaka
-    baseurl: "https://125.208.28.24/repos/openstack/openstack-mitaka/base"
+    sslverify: 0
     sslclientcert: "/etc/pki/chinac/yum.pem"
     sslclientkey: "/etc/pki/chinac/yum-key.pem"
-    #- name: centos-openstack-mitaka-dev
-    #- file: CentOS-OpenStack-mitaka
-    #- baseurl: "http://172.16.7.201/openstack/build/Dev/mitaka-chinac/latest"
-    #- sslclientcert: ""
-    #- sslclientkey: ""
+  - name: Ceph-x86_64
+    file: ceph-jewel
+    baseurl: "https://{{ INTERNAL_CEPH_REPO_HOST }}/repos/ceph/jemalloc/x86_64/"
+    priority: 1 
+    sslverify: 0
+    sslclientcert: "/etc/pki/chinac/yum.pem"
+    sslclientkey: "/etc/pki/chinac/yum-key.pem"
+
 
 PIP_REPO_MIRROR_HOST: pypi.mirrors.ustc.edu.cn
-
-#if use 1.5.34 will happen gatherkeys 'allow mds *' problem
-CEPH_DPLOY_RPM_URL: http://172.16.24.35/ceph-rpm/jemalloc/noarch/ceph-deploy-1.5.34-0.noarch.rpm
-DOWNLOAD_FOLDER: /opt/download
-
-CEPH_PACKAGE_URL: ftp://openstacksoft:Aaopenstacksoft@125.208.28.24/ceph6.tar.gz
 
 # in order to support multiple osds on single disk, partitions maybe used for data store,
 # so from now, paritions are used for two types: OSD or journal
@@ -166,34 +125,4 @@ ceph_osd_layout_map:
  
 ceph_management_dir: /root/ceph-management/
  
-ceph_osd_layouts:
-  # 6 SATA + 3 SSD for OSDs
-  # 1 SSD is sed as SATA journal
-  ceph_osd_layout_1:
-    - device: vda
-      use_cache: no
-      cache: vdb1
-      use_type: yes
-      type: hdd
-    - device: vdb
-      use_cache: no
-      cache: vdb2
-      use_type: yes
-      type: hdd
-    - device: vdc
-      use_cache: no
-      cache: vdb2
-      use_type: yes
-      type: hdd
-   
-ceph_osd_layout_map:
-  tt-master:
-    partition: disk_partition_layout1
-    osd: ceph_osd_layout_1
-  tt-slave1:
-    partition: disk_partition_layout1
-    osd: ceph_osd_layout_1
- 
-ceph_management_dir: /root/ceph-management/
-
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

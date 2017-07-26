@@ -2,10 +2,25 @@
 # This task will handle some basic function
 # such as config package repo, install mandatory packages
 # for all nodes and so on
-#
+- name: remove default repo
+  shell: rm -fr /etc/yum.repos.d/*
+
 - name: enable Openstack Repository for CentOS
   yum: name=centos-release-openstack-mitaka state=latest
   when: not INTERNAL_REPO_ENABLED
+
+# Below is for Chinac internal repo
+# We need copy some key file as https used
+#
+- name: create target directory
+  file: path=/etc/pki/chinac state=directory mode=0755
+  when: CHINAC_REPO_ENABLED
+
+- name: Copy key file to target host
+  copy: src={{ item }} dest=/etc/pki/chinac/ mode=755
+  with_items:
+    - yum.pem
+    - yum-key.pem
 
 # the module yum_repository hasn't been officially released on PIP by Apr.
 # 2016 download it from github then put it under
@@ -20,41 +35,12 @@
     failovermethod: priority
     enabled: 1
     gpgcheck: no
-    priority: "{{ item.priority | default(99) }}"
-    #sslclientcert: "{{ item.sslclientcert | default('') }}"
-    #sslclientkey: "{{ item.sslclientkey | default('') }}"
-  with_items: "{{ INTERNAL_REPO_MIRRORS }}"
-  when: INTERNAL_REPO_ENABLED
-
-# Below is for Chinac internal repo
-# We need copy some key file as https used
-#
-- name: create target directory
-  file: path=/etc/pki/chinac state=directory mode=0755
-  when: CHINAC_REPO_ENABLED
-
-- name: Copy key file to target host
-  copy: src={{ item }} dest=/etc/pki/chinac/ mode=755
-  with_items:
-    - yum.pem
-    - yum-key.pem
-  when: CHINAC_REPO_ENABLED
-
-- name: config Chinac to use own rpm repo
-  yum_repository:
-    name: "{{ item.name }}"
-    file: "{{ item.file }}"
-    baseurl: "{{ item.baseurl }}"
-    description: "{{ item.description | default(item.name) }}"
-    state: present
-    failovermethod: priority
-    enabled: 1
-    gpgcheck: no
     sslverify: 0
+    priority: "{{ item.priority | default(99) }}"
     sslclientcert: "{{ item.sslclientcert | default('') }}"
     sslclientkey: "{{ item.sslclientkey | default('') }}"
-  with_items: "{{ CHINAC_REPO_MIRROS }}"
-  when: CHINAC_REPO_ENABLED
+  with_items: "{{ INTERNAL_REPO_MIRRORS }}"
+  when: INTERNAL_REPO_ENABLED
 
 - name: disable fastestmirror plugin
   ini_file:
