@@ -2,6 +2,14 @@
 # This task will handle some basic function
 # such as config package repo, install mandatory packages
 # for all nodes and so on
+- name: install libselinux-python
+  yum: name={{ item }}
+  with_items:
+     - libselinux-python
+  register: pkg_inst_result
+  until: pkg_inst_result|success
+  retries: 3
+
 - name: remove default repo
   shell: rm -fr /etc/yum.repos.d/*
 

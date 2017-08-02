@@ -2,10 +2,7 @@
 # Please consider joining the pool (http://www.pool.ntp.org/join.html).
 
 {% if  ansible_hostname == groups.MON[0] %}
-server 0.centos.pool.ntp.org iburst
-server 1.centos.pool.ntp.org iburst
-server 2.centos.pool.ntp.org iburst
-server 3.centos.pool.ntp.org iburst
+server 127.127.1.1 iburst
 {% else %}
 server {{ groups.MON[0] }} iburst
 {% endif %}
@@ -21,20 +18,23 @@ rtcsync
 
 # In first three updates step the system clock instead of slew
 # if the adjustment is larger than 10 seconds.
-makestep 10 3
+makestep 1 -1
 
 # Allow NTP client access from local network.
 #allow 192.168/16
-{% if ansible_hostname == DEPLOYMENT_NODES[0].name %}
-allow {{ NTP_CLIENT_NETWORK }} 
+{% if ansible_hostname == groups.MON[0] %}
+{% for item in network_interfaces %}
+{% if item.name == "vm_network" %}allow {{ item.network }}/{{ item.prefix }}{% endif %}
+{% endfor %}
 {% endif %}
+
 
 # Listen for commands only on localhost.
 bindcmdaddress 127.0.0.1
 bindcmdaddress ::1
 
 # Serve time even if not synchronized to any NTP server.
-#local stratum 10
+local stratum 10
 
 keyfile /etc/chrony.keys
 
