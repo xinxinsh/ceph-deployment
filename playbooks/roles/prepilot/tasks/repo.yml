@@ -22,7 +22,7 @@
 #
 - name: create target directory
   file: path=/etc/pki/chinac state=directory mode=0755
-  when: CHINAC_REPO_ENABLED
+  when: INTERNAL_REPO_ENABLED
 
 - name: Copy key file to target host
   copy: src={{ item }} dest=/etc/pki/chinac/ mode=755
