@@ -65,4 +65,11 @@
     - images
     - "{{ types | unique | list }}"
 
+- name: change pool min_size
+  command: ssh {{ groups.MON[0] }} "ceph osd pool set {{ item }} min_size {{ ((replicas | int) - 1) | int }} "
+  with_items:
+    - volumes
+    - images
+    - "{{ types | unique | list }}"
+
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
