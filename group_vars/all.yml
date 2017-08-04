@@ -3,6 +3,7 @@
 
 # some operations could be time consuming and users may want to skip them
 # totally even though they are idempotent
+# the install flag is to skip ceph installation
 step_switch:
   nic: yes
   hostname: yes
@@ -11,6 +12,7 @@ step_switch:
   partition: yes
   repo: yes
   ntp: yes
+  install: yes
 
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
