@@ -72,4 +72,10 @@
     - images
     - "{{ types | unique | list }}"
 
+- assert:
+    that:
+      - "replicas | int >= 2"
+      - "replicas | int <= 3"
+    msg: "replica size should be 2 or 3"
+
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
