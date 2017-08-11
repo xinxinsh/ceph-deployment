@@ -53,8 +53,8 @@
 
 - name: get replica size
   set_fact:  
-    replicas: "{{ groups.OSD | length | int }}"
-  when:  groups.OSD | length | int  < replicas
+    replicas: 2
+  when:  groups.OSD | length | int  < 4
 
 - debug: var=replicas
 
