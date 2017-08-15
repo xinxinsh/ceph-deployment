@@ -1,0 +1,7 @@
+---
+
+- name: restart ceph-osd
+  command: ssh {{ item }} "systemctl restart ceph-osd.target"
+  with_items: "{{ groups.EXT }}"
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
