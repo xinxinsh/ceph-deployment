@@ -13,6 +13,7 @@ step_switch:
   repo: yes
   ntp: yes
   install: no 
+  purge: no
 
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
