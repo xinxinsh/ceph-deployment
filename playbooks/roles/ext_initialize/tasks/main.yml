@@ -1,0 +1,23 @@
+---
+# tasks file for update crush map and create pools for opsntack
+
+# update crush map according disk type
+- include: crushmap.yml
+  with_items: "{{ groups.EXT }}"
+  loop_control:
+    loop_var: osd_hostname
+
+- include: delfile.yml
+  with_items: "{{ groups.EXT }}"
+  loop_control:
+    loop_var: osd_hostname
+
+# cleanup rule sets
+- include: cleanup.yml
+
+# cleanup rule sets
+- include: config.yml
+
+# create a new rule for pools
+- include: ruleset.yml
+

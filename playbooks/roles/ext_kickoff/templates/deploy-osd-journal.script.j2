@@ -1,0 +1,20 @@
+#!/bin/bash
+
+id=`ceph osd getmaxosd | cut -d" " -f3`
+conf={{ ceph_management_dir }}/ceph.conf
+osd_conf=/tmp/config-{{ osd_hostname }}-{{ disk.device }}.conf
+
+echo "[osd.${id}]" >> ${conf}
+cat ${osd_conf} >> ${conf}
+
+partition={{ disk.device | regex_replace('^[a-z]+([0-9]+)$', '\\1') | int }}
+
+if [[ ${partition} -gt 0 ]]
+then
+  ceph-deploy --overwrite-conf osd prepare {{ osd_hostname }}:/dev/{{ disk.device }}:/dev/{{ disk.cache }}
+  ceph-deploy --overwrite-conf osd activate {{ osd_hostname }}:/dev/{{ disk.device }}:/dev/{{ disk.cache }}
+else
+  ceph-deploy --overwrite-conf osd create {{ osd_hostname }}:/dev/{{ disk.device }}:/dev/{{ disk.cache }}
+fi
+
+# vim: ft=sh:shiftwidth=4:tabstop=4:expandtab:softtabstop=4

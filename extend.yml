@@ -1,0 +1,56 @@
+---
+# This playbook deploys chinac Neo CloudUltra management platform
+
+#- name: execute prepilot preparations and checks
+#  any_errors_fatal: true
+#  hosts:
+#    - EXT
+#  roles:
+#    - prepilot
+
+
+#- name: install ceph packages
+#  any_errors_fatal: true
+#  hosts:
+#    - ADMIN 
+#  roles:
+#    - ext_install
+#
+#- name: zap disk
+#  any_errors_fatal: true
+#  hosts:
+#    - ADMIN
+#  roles:
+#    - ext_zap
+
+
+#- name: partition and format related disks
+#  any_errors_fatal: true
+#  hosts:
+#    - EXT
+#  roles:
+#    - ext_provision
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
+
+#- name: configure and start ceph services
+#  any_errors_fatal: true
+#  hosts:
+#    - ADMIN
+#  roles:
+#    - ext_kickoff
+#  run_once: yes
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
+# update crush map according to disk types
+# create rule set for different disk types
+# create pools for openstack on HDD 
+
+- name: update crush map of ceph cluster and create pools for openstack
+  any_errors_fatal: true
+  hosts:
+    - ADMIN
+  roles:
+    - ext_initialize
+  run_once: yes
+

@@ -1,0 +1,18 @@
+---
+
+- name: load EXT OSD layout
+  set_fact:
+    osd_layout: "{{ ext_osd_layouts[ext_osd_layout_map[osd_hostname].osd] | mandatory }}"
+
+- name: get ext osd device
+  set_fact:
+    devices: "{{ devices | default([]) + [item.device | regex_replace('^([a-z]+)[0-9]+$', '\\1')] }}"
+  with_items: "{{ osd_layout | list }}"
+
+- debug:
+    msg: "EXT OSD Devices {{ devices | unique }}"
+
+- name: zap EXT OSD partition
+  command: ssh {{ osd_hostname }} "sgdisk --zap-all --clear --mbrtogpt /dev/{{ item }}"
+  with_items: "{{ devices | unique }}"
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

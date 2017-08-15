@@ -9,10 +9,10 @@ step_switch:
   hostname: yes
   selinux: yes
   ssh_key: yes
-  partition: yes
+  partition: no
   repo: yes
   ntp: yes
-  install: yes
+  install: no 
 
 # each host must set ceph_network_ip and vm_network_ip
 network_interfaces:
@@ -124,7 +124,28 @@ ceph_osd_layout_map:
   tt-slave1:
     partition: disk_partition_layout1
     osd: ceph_osd_layout_1
+
+ext_disk_partition_layouts:
+  disk_partition_layout2: 
+    - device: vdb
+      partitions:
+      - percent: [4096s, 100%]
+        name: journal01
+        filesystem: xfs
  
+ext_osd_layouts:
+  ceph_osd_layout_2:
+    - device: vda
+      use_cache: no
+      cache: vdb1
+      use_type: yes
+      type: hdd
+
+ext_osd_layout_map:
+  tt-slave2:
+    partition: disk_partition_layout2
+    osd: ceph_osd_layout_2
+
 ceph_management_dir: /root/ceph-management/
  
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

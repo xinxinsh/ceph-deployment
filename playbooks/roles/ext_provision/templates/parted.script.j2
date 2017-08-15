@@ -1,0 +1,35 @@
+#!/bin/bash
+parted --script "/dev/{{ disk.device | escape }}" \
+    mklabel gpt \
+    unit s \
+    {% for part in disk.partitions %}
+    mkpart {{ part.name }} {{ part.percent[0] }} {{ part.percent[1] }} \
+    {% endfor %}
+    p \
+    q
+
+sleep 2
+
+# partitions formatted by ourself do not set type code, so the udev rules of change disk 
+# permission does not trigger, set the type code for every journal partitions
+# Fix issues: http://jira.chinac.com/browse/NEOCU-2454
+JOURNAL_TYPECODE=45b0969e-9b03-4f30-b4c6-b4b80ceff106
+OSD_TYPECODE=4fbd7e29-9d25-41b8-afd0-062c0ceff05d
+
+
+{% for part in disk.partitions %}
+  TYPE={{ part.name | regex_replace('^([a-z]+)[0-9]+','\\1') }}
+  if [[ ${TYPE} == "journal" ]]
+  then
+    /usr/sbin/sgdisk --typecode={{ loop.index }}:${JOURNAL_TYPECODE} -- /dev/{{ disk.device }}
+  elif [[ ${TYPE} == "data" ]]
+  then
+    /usr/sbin/sgdisk --typecode={{ loop.index }}:${OSD_TYPECODE} -- /dev/{{ disk.device }}
+  fi
+
+  chown -R ceph:ceph /dev/{{disk.device}}{{loop.index}}
+
+{% endfor %}
+
+
+# vim: ft=sh:shiftwidth=4:tabstop=4:expandtab:softtabstop=4

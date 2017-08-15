@@ -1,0 +1,18 @@
+---
+# tasks file for kickoff
+
+- include: update_conf.yml
+
+- include: add-osd.yml
+  with_items: "{{ groups.EXT }}"
+  loop_control:
+    loop_var: osd_hostname
+
+- include: cleanup.yml
+  with_items: "{{ groups.EXT }}"
+  loop_control:
+    loop_var: osd_hostname
+
+- include: verify.yml
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
