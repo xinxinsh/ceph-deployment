@@ -5,6 +5,8 @@ crushhost={{ disk.type }}-{{ osd_hostname }}
 crushroot={{ disk.type }}
 
 ssh {{ groups.MON[0] }} "ceph osd crush create-or-move osd.${id} 0 host=${crushhost} root=${crushroot}"
+ssh {{ groups.MON[0] }} "ceph osd crush reweight osd.${id} 0 "
+ssh {{ groups.MON[0] }} "ceph osd out osd.${id}"
 
 
 # vim: ft=sh:shiftwidth=4:tabstop=4:expandtab:softtabstop=4
