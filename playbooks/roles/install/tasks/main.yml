@@ -1,37 +1,4 @@
 ---
-# tasks file for install
-
-#- name: install python argparse from pip
-#  pip:
-#    state: present
-#    name: "{{ item }}"
-#    extra_args: "-i https://{{ PIP_REPO_MIRROR_HOST }}/simple"
-#  with_items:
-#    - argparse
-
-- name: ceph-deploy install slave node
-  command: "ceph-deploy install --no-adjust-repos {{ groups['all'] | join(' ') }}"
-  when: ansible_hostname in "{{ groups['ADMIN'] }}"
+- include: install.yml
+  when: step_switch.install
   
-#- name: clean existing download folder
-#  file:
-#    dest: "{{ DOWNLOAD_FOLDER }}"
-#    state: absent
-#
-#- name: create download folder
-#  file:
-#    dest: "{{ DOWNLOAD_FOLDER }}"
-#    state: directory
-#
-#- name: uncompress downloaded package
-#  unarchive:
-#    copy: no
-#    src: "{{ CEPH_PACKAGE_URL }}"
-#    dest: "{{ DOWNLOAD_FOLDER }}"
-#
-#- name: install downloaded packages
-#  command: "rpm -ivh *.rpm"
-#  args:
-#    chdir: "{{ DOWNLOAD_FOLDER }}/ceph6"
-
-# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

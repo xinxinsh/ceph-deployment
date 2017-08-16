@@ -1,0 +1,11 @@
+---
+# tasks file for install
+
+- name: test varible
+  debug: var=groups['ADMIN']
+
+- name: ceph-deploy install ext node
+  command: "ceph-deploy install --no-adjust-repos {{ groups['EXT'] | join(' ') }}"
+  args:
+    chdir: "{{ ceph_management_dir }}"
+  

@@ -1,0 +1,23 @@
+---
+- name: register hosts
+  set_fact:
+    hosts: "{{ groups.ADMIN + groups.EXT }}"
+- debug: var="hosts | join(' ')"
+
+- name: check network connectivity with ping, at least 3/4 packets should be accessible
+  shell: ping -c 4 {{ item }}  | sed -n 's/.*\([0-9]\+\) received.*/\1/p'
+  register: packet_loss
+  with_items: "{{ hosts | unique | list }}"
+  when: "inventory_hostname in groups.ADMIN and item != 'localhost'"
+
+- name: check ssh passwordless login
+  command: ssh -o PasswordAuthentication=no {{ item }} hostname -s
+  register: ssh_hostname
+  with_items: "{{ hosts | unique | list }}"
+  when: "inventory_hostname in groups.ADMIN and item != 'localhost'"
+  failed_when: "ssh_hostname.stdout != item"
+
+- name: check selinux status should be disabled
+  shell: sestatus | head -1 | grep disabled
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

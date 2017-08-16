@@ -16,3 +16,44 @@ One is for data and the other is for management
 
 2. Each ceph node need another three hard disks at least
 For example, sdb, sdc, sdd 
+
+
+How to add osd to cluster
+
+1. Edit inventory/host
+   (a) if the new osd is on a new host, add a line as follows
+       tt-slave2 ansible_connection=ssh ansible_user=root ansible_ssh_pass=huayun ansible_host=10.21.1.99 ansible_port=22 ceph_network_ip=10.21.1.99 vm_network_ip=10.21.1.99
+   (b) then add this host to [EXT] section
+       [EXT]
+       tt-slave2
+
+2. Edit group_vars/all.yml
+   (a) Edit ext_osd_layouts section
+       if the journal of new osd is on seperate disk, go to (b), otherwise go to (c),
+       the follow is an example of new osd on vda without seperate journal
+
+      - device: vda
+        use_cache: no
+        cache: vdb1
+        use_type: yes
+        type: hdd
+       
+   (b) Edit ext_disk_partition_layouts section
+       the following example shows vdb as journal partition
+
+       - device: vdb
+         partitions:
+         - percent: [4096s, 100%]
+           name: journal01
+           filesystem: xfs
+
+   (c) Edit ext_osd_layout_map section 
+       if the host is new to cluster, edit this section, the following example shows host
+       tt-slave2 is new host with osd layout (ceph_osd_layout_2) and partition layout 
+       (disk_partition_layout2)
+  
+       tt-slave2:
+         partition: disk_partition_layout2
+         osd: ceph_osd_layout_2
+
+3. ansible-playbook extend.yml

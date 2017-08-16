@@ -1,0 +1,7 @@
+---
+
+- name: update conf
+  command: sed -i "s/cephx/none/g" "{{ ceph_management_dir }}"/ceph.conf
+
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

@@ -1,0 +1,25 @@
+---
+# tasks file for prepilot
+
+- name: gather network information
+  set_fact:
+    net: "{{ item | mandatory }}"
+
+- name: check bonding requirement
+  fail: msg="bonding is not supported in current version"
+  when: net.use_bonding
+
+- name: upload ifcfg configuration
+  template:
+    force: yes
+    backup: yes
+    src: ifcfg.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-{{ net.nic }}
+    mode: 0644
+    setype: net_conf_t
+  register: ifcfg_upload
+
+- name: make new network config work
+  command: ifup {{ net.nic }}
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

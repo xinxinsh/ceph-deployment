@@ -1,0 +1,28 @@
+---
+
+- name: load ext OSD layout
+  set_fact:
+    osd_layout: "{{ ext_osd_layouts[ext_osd_layout_map[osd_hostname].osd] | mandatory }}"
+
+- name: generate crushmap script
+  template:
+    backup: yes
+    src: "crushmap.script.j2"
+    dest: "/tmp/crushmap-{{ osd_hostname }}-{{ disk.device }}.script"
+    mode: "744"
+  with_items: "{{ osd_layout | selectattr('use_type') | list }}"
+  loop_control:
+    loop_var: disk
+
+- name: update crushmap location for osds
+  command: /bin/bash /tmp/crushmap-{{ osd_hostname }}-{{ item.device }}.script
+  args:
+    chdir: "{{ ceph_management_dir }}"
+  with_items: "{{ osd_layout | selectattr('use_type') | list }}"
+  
+- name: generate disk types
+  set_fact:
+    types: "{{ types | default([]) + [item.type] }}"
+  with_items: "{{ osd_layout | selectattr('use_type') | list }}"
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

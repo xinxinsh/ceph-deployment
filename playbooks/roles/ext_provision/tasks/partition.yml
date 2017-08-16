@@ -1,0 +1,47 @@
+---
+
+
+- name: load EXT partition layout
+  set_fact:
+    disk_layout: "{{ ext_disk_partition_layouts[ext_osd_layout_map[inventory_hostname].partition] | mandatory }}"
+
+- name: generate parted script
+  template:
+    src: "parted.script.j2"
+    dest: "/tmp/parted-{{ disk.device }}.script"
+    mode: "744"
+  with_items: "{{ disk_layout }}"
+  loop_control:
+    loop_var: disk
+
+- name: prompt dangourous behavior
+  pause:
+    prompt: |-
+      !!!!!!!! IMPORTANT !!!!!!!!
+      Data in device {{ disk_layout | map(attribute='device') | join(', ') }}
+      will be unrecoverably deleted after partition and format. Are you sure it is
+      intended? (Enter to continue, press CTRL-C then A to abort)
+
+- name: prompt dangourous behavior again
+  pause:
+    prompt: |-
+      !!!!!!!! IMPORTANT !!!!!!!!
+      Again, Data in device {{ disk_layout | map(attribute='device') | join(', ') }}
+      will be UNRECOVERABLY DELETED after partition and format.  Are you sure to
+      continue? (Enter to start for real, press CTRL-C then A to abort)
+
+- name: repartition and format
+  command: bash /tmp/parted-{{ item.device }}.script
+  with_items: "{{ disk_layout }}"
+
+- name: get partition list
+  command: lsblk -f
+  register: lsblk_out
+
+- pause:
+    prompt: |-
+      Please check if all disks have been well formated.
+      {{ lsblk_out.stdout }}
+      continue? (Enter to start for real, press CTRL-C then A to abort)
+
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

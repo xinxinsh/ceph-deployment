@@ -1,0 +1,9 @@
+TYPE=Ethernet
+BOOTPROTO=none
+IPV6INIT=no
+IPV6_AUTOCONF=no
+NAME={{ net.nic }}
+DEVICE={{ net.nic }}
+ONBOOT=yes
+IPADDR={{ hostvars[inventory_hostname][net.ip_addr_ref] }}
+PREFIX={{ net.prefix }}

@@ -1,0 +1,9 @@
+---
+
+- include: purgecluster.yml
+  when: step_switch.purge  
+
+- include: install.yml
+  when: step_switch.install
+
+  

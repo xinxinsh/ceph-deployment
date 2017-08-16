@@ -1,0 +1,24 @@
+---
+# This task used to create ntp
+#
+- name: Set the system time zone
+  file:
+    src: /usr/share/zoneinfo/Asia/Shanghai
+    dest: /etc/localtime
+    state: link
+
+- name: Install ntp software packages
+  yum: name=chrony state=latest
+  register: pkg_inst_result
+  until: pkg_inst_result|success
+  retries: 3
+  delay: 5
+
+# Solution: first controller node will sync with network ntp server
+# the others will sync with first controller node
+#
+- name: Create chrony.conf
+  template: src=chrony.conf.j2 dest=/etc/chrony.conf
+
+- name: Start ntp service and configure it to start during boot
+  service: name=chronyd.service enabled=yes state=started

@@ -53,8 +53,8 @@
 
 - name: get replica size
   set_fact:  
-    replicas: "{{ groups.OSD | length | int }}"
-  when:  groups.OSD | length | int  < replicas
+    replicas: 2
+  when:  groups.OSD | length | int  < 4
 
 - debug: var=replicas
 
@@ -64,5 +64,18 @@
     - volumes
     - images
     - "{{ types | unique | list }}"
+
+- name: change pool min_size
+  command: ssh {{ groups.MON[0] }} "ceph osd pool set {{ item }} min_size {{ ((replicas | int) - 1) | int }} "
+  with_items:
+    - volumes
+    - images
+    - "{{ types | unique | list }}"
+
+- assert:
+    that:
+      - "replicas | int >= 2"
+      - "replicas | int <= 3"
+    msg: "replica size should be 2 or 3"
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

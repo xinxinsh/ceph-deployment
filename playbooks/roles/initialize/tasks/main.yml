@@ -21,9 +21,9 @@
 # create a new rule for pools
 - include: ruleset.yml
 
+- include: create-config.yml
+
 # create pools for openstack
 - include: create-pool.yml
-
-- include: create-config.yml
 
 # vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2
