@@ -1,7 +1,7 @@
 ---
 - name: register hosts
   set_fact:
-    hosts: "{{ groups.ADMIN + groups.OSD + groups.MON }}"
+    hosts: "{{ groups.ADMIN + groups.EXT }}"
 - debug: var="hosts | join(' ')"
 
 - name: check network connectivity with ping, at least 3/4 packets should be accessible

@@ -1,0 +1,43 @@
+---
+# tasks file for prepilot
+
+- name: use local repository
+  include: repo.yml
+  when: step_switch.repo
+
+- name: install gdisk & systemd
+  yum: name={{ item }}
+  with_items:
+     - gdisk
+     - systemd
+  register: pkg_inst_result
+  until: pkg_inst_result|success
+  retries: 3
+
+- name: setup network interfaces
+  include: network-interfaces.yml
+  with_items: "{{ network_interfaces }}"
+  when: step_switch.nic
+
+- name: setup hosts file
+  include: hosts-config.yml
+  when: step_switch.hostname
+
+- name: disable selinux
+  include: selinux.yml
+  when: step_switch.selinux
+
+- name: setup passwordless ssh on every node
+  include: ssh_key_import.yml
+  when: step_switch.ssh_key
+
+- name: create ceph user
+  include: create_ceph_user.yml
+
+- name: verify all configurations
+  include: verify.yml
+
+- name: install ntp
+  include: config_ntp.yml
+  when: step_switch.ntp
+# vim: ft=yaml:shiftwidth=2:tabstop=2:expandtab:softtabstop=2

@@ -1,0 +1,11 @@
+
+- name: ensure ceph group
+  group:
+    name: ceph
+    state: present
+
+- name: ensure ceph user
+  user:
+    name: ceph
+    state: present
+    group: ceph

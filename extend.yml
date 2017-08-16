@@ -4,9 +4,10 @@
 - name: execute prepilot preparations and checks
   any_errors_fatal: true
   hosts:
+    - ADMIN 
     - EXT
   roles:
-    - prepilot
+    - ext_prepilot
 
 
 - name: install ceph packages
