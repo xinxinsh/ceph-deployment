@@ -1,16 +1,8 @@
 # update config to keep crushmap update after restarting osds
 #
-- name: get osd_crush_update_on_start
-  shell: ssh {{ groups.MON[0] }} "ceph-conf --lookup osd_crush_update_on_start"
-  register: crush_update
-
-- name: debug crush_update
-  debug: var={{ crush_update.stdout }}
-
 - name: update config to keep crushmap update
   shell: ssh {{ osd_hostname }} "sed -i '/rbd_cache = false/a osd_crush_update_on_start = false' /etc/ceph/ceph.conf"
   with_items: "{{ groups.OSD }}"
   loop_control:
     loop_var: osd_hostname
-  when: "{{ crush_update.stdout }} == true"
   
