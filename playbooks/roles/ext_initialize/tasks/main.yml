@@ -17,6 +17,9 @@
 
 # cleanup rule sets
 - include: config.yml
+  with_items: "{{ groups.EXT }}"
+  loop_control:
+    loop_var: osd_hostname
 
 # create a new rule for pools
 - include: ruleset.yml
